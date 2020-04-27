@@ -43,6 +43,7 @@
 		.dropzone .dz-message {
     			margin: 1em 0;
 		}
+		.dragzidx {cursor: move;margin:2px;padding:2px;background:rgb(0, 135, 247);color:white;border-radius: 2px; width:50px: height:30px;} 
 
 		.trash {
 			height: 200px;
@@ -143,13 +144,8 @@
 			<label class="custom-control-label" for="no-white-bg">No White Background</label>
    		</div>
 	</div>
-	<div class="row no-print">
-		<div align=center style="height:30px">
-			<ul style="list-style-type:none;" id="list-1">
-			</ul>
-		</div>
-	</div>
-	<div class="row no-print" style="padding-top:5px">
+	<div class="row no-print" style="padding-top:5px;float:center">
+		<div id="list-1" style="width:60px;height:200px;overflow:auto;border:1px dashed red;float:left;"></div>
 		<div align=center class="col-xs-4" style="height:200px">
 			<FORM class="dropzone needsclick" id="dropzoneUpload" action="/">
 			<div class="dz-message needsclick">Drop a SVG (high resolution), JPEG, GIF or PNG file here or click here to upload. Click "Add Text Box" to add a text input box to the canvas. Click and select text to format. Note: use open-source tool <b>Inkscape</b> (https://inkscape.org) to convert other formats to one of the acceptable formats, preferably SVG.</div>
@@ -158,7 +154,7 @@
 		<div align=center class="col-xs-4">
 			<div class="trash"></div>
 		</div>
-		<div align=center class="col-xs-4"><img width=240 height=200 src=figureComposer_help.png></div>
+		<div align=center class="col-xs-3"><img width=240 height=200 src=figureComposer_help.png></div>
 	</div> 
 	<div class="row" id="plotcanvas">
 		<div class="grid-stack"></div>
@@ -353,7 +349,7 @@
 				svg = '<svg xmlns="http://www.w3.org/2000/svg"><g fill=white stroke=white stroke-width=0><circle cx=0 cy=0 r=1/></g></svg>';
 			}
 	
-			imageId = "i_m_g"+num; 
+			imageId = "im_g"+num; 
 			var wm=20, hm=20;
 
 			svg = svg.replace(/(\r\n|\n|\r)/gm,"").replace(/\s+/gm, " ");
@@ -421,9 +417,10 @@ console.log($('#no-white-bg').prop('checked'));
 			var el = this.grid.addWidget($('<div class=image_div id='+imageId+'z style="z-index:'+initZindex+';"><div class="grid-stack-item-content col-xs-4"><div class="tinymce-body" id='+figureTitle+' align="left"  onclick="addEditor\('+figureTitle+'\);this.focus\(\);">'+textHint+'</div><div id="'+imageId+'_container" class='+myType+' style="width: 100%; height: 100%; ">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height);
 
 			num += 1;
-			$('#list-1').append('<li id='+imageId+'z_li style="float:left;margin:2px;padding:4px;background:rgb(0, 135, 247);color:white;border-radius: 4px;">'+imageId+'z</li>');
+			// z-index control of the image
+			$('#list-1').append('<div id='+imageId+'zidx class="dragzidx"><span>'+imageId+'z</span></div>');
 
-			$('#'+imageId+'z_li').hover(
+			$('#'+imageId+'zidx').hover(
 				function () {
 // Baohong: textContent is the text in <li> tag
 					div_id = this.textContent;
@@ -484,7 +481,7 @@ console.log($('#no-white-bg').prop('checked'));
 
 		$('#add-new-Control').click( function () {
 			for (var i=1; i<num; i++) {
-				var myImg = "i_m_g"+i;
+				var myImg = "im_g"+i;
 				var myContainer = myImg + "_container";
 console.log(myImg);
 console.log(document.getElementById(myImg));
@@ -549,7 +546,7 @@ console.log(document.getElementById(myImg));
 //			text += '<div id=locsize style="display:none;">' + JSON.stringify(locsize) + '</div>';
 
 			for (var i=1; i<num; i++) {
-				var myImg = "i_m_g"+i;
+				var myImg = "im_g"+i;
 				if (document.getElementById(myImg) == null) {
 					continue;
 				}
@@ -654,7 +651,7 @@ console.log(document.getElementById(myImg));
 
 
 	this.addSVG = function ( mysvg, num ) {
-		imageId = "i_m_g"+num; 
+		imageId = "im_g"+num; 
 		var svg = mysvg;
 
 		svg.match(/width="(\d+)/);
@@ -680,7 +677,7 @@ console.log(document.getElementById(myImg));
 
 	var CTMs = [];
 	for (var i=1; i<=locsize['num']; i++) {
-		var myImg = "i_m_g"+i;
+		var myImg = "im_g"+i;
 		if (document.getElementById(myImg) == null) {
 			continue;
 		}
@@ -688,7 +685,7 @@ console.log(document.getElementById(myImg));
 	}
 
 	for (var i=1; i<=locsize['num']; i++) {
-		var myImg = "i_m_g"+i;
+		var myImg = "im_g"+i;
 		if (document.getElementById(myImg) == null) {
 			continue;
 		}
