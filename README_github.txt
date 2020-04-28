@@ -36,6 +36,6 @@ Search "git"
 Delete every old & strange items Try to Push again and it just WORKED
 
 # A personal access token has been added to your account
-# https://cloudhub.corp.biogen.com/pages/compbio/canvasDesigner
+# https://cloudhub.corp.biogen.com/pages/compbio/figureComposer
 
 f5e2b5beaad98951dbece933e448d9d8663423eb
