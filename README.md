@@ -1,6 +1,6 @@
 # figureComposer
-A web-based interactive publication-quality composite figure designing tool 
+A web-based interactive multi-panel bio-infographic designing tool
 ---
-![figureComposer](video/figureComposer.gif?raw=true "figureComposer")
+![figureComposer](figure/Fig1.png?raw=true "figureComposer")
 ---
 [HD Video](https://baohongz.github.io/figureComposer/demo_video.html)
