@@ -262,7 +262,8 @@
 
 		Dropzone.options.dropzoneUpload = {
 			maxFiles:1,
-			maxFilesize:50,
+			maxFilesize:256,
+            maxThumbnailFilesize:256,   
 			resizeQuality: 1,
 			thumbnailWidth: null,
 			thumbnailHeight: null,
@@ -338,8 +339,10 @@
 
 		this.addNewWidget = function (myType) {
 			var svg = null;
+console.log(myType);
 			if (myType == "plot-box") {
 				var images = myFile.previewElement.querySelectorAll("[data-dz-thumbnail]");
+console.log(images);
 				if (images[0].src.match(/^data:image\/svg/)) {
 					svg = decodeURIComponent(escape(atob(images[0].src.replace(/^data:image\/.*;base64,/, ""))));
 				} else {
