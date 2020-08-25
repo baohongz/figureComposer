@@ -387,6 +387,8 @@ console.log('width='+wm+' height='+hm);
 			svg = svg.replace(/clip-path=\"url\(#clip(\d+)\)\"/ig, 'clip-path=\"url\(#clip-'+num+'-$1\)\"');
 
 			svg = svg.replace(/id=\"path(\d+)\"/ig, 'id=\"path-'+num+'-$1\"');
+// MS PPT exports
+			svg = svg.replace(/=\"(#?)img(\d+)\"/ig, '=\"$1-img-'+num+'-$2\"');
 
 
 // Remove white background to make it transparent
