@@ -23,7 +23,7 @@
 
   // constants
   var __SVGINJECT = '__svgInject';
-  var ID_SUFFIX = '--inject-';
+  var ID_SUFFIX = '--bz-';
   var ID_SUFFIX_REGEX = new RegExp(ID_SUFFIX + '\\d+', "g");
   var LOAD_FAIL = 'LOAD_FAIL';
   var SVG_NOT_SUPPORTED = 'SVG_NOT_SUPPORTED';
@@ -685,6 +685,10 @@
     };
 
     window[globalName] = SVGInject;
+// Baohong: export functions
+	window.buildSvgElement = buildSvgElement;
+	window.makeIdsUnique = makeIdsUnique;
+    window.svgElemToSvgString  = svgElemToSvgString;
 
     return SVGInject;
   }

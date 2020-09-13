@@ -24,6 +24,7 @@
 	<script src="dist/gridstack.jQueryUI.js"></script>
 	<script src="dist/dropzone.js"></script>
 	<script src="dist/svg-pan-zoom.js"></script>
+	<script src="dist/svg-inject.js"></script>
 
 	<script src="dist/FileSaver.min.js"></script>
 	<script src="dist/tinymce/tinymce.min.js"></script>
@@ -373,23 +374,28 @@ console.log(images);
 					hm = 800;
 				}
 			}
-//console.log(svg)
 console.log('width='+wm+' height='+hm);
 
 			svg = svg.replace(/.*?<svg[^>]+>/i, '<svg xmlns="http://www.w3.org/2000/svg" id="'+imageId+'" style="display: inline; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; " width="'+wm+'" height="'+hm+'" viewBox="0 0 '+wm+' '+hm+'" version="1.1">');
 
 			svg = svg.replace(/<g +id=\"svg-pan-zoom-controls\".+/, '<\/svg>').replace(/<g[^>]+svg-pan-zoom_viewport[^>]+>/, '');
 
-// Avoid components with same names from different SVG files
-			svg = svg.replace(/glyph(\d+)-(\d+)/ig, 'glyph-'+num+'-$1-$2');
 
+// Avoid components with same names from different SVG files (old)
+/*
+			svg = svg.replace(/glyph(\d+)-(\d+)/ig, 'glyph-'+num+'-$1-$2');
 			svg = svg.replace(/clipPath id=\"clip(\d+)\"/ig, 'clipPath id=\"clip-'+num+'-$1\"');
 			svg = svg.replace(/clip-path=\"url\(#clip(\d+)\)\"/ig, 'clip-path=\"url\(#clip-'+num+'-$1\)\"');
-
 			svg = svg.replace(/id=\"path(\d+)\"/ig, 'id=\"path-'+num+'-$1\"');
 // MS PPT exports
 			svg = svg.replace(/=\"(#?)img(\d+)\"/ig, '=\"$1-img-'+num+'-$2\"');
+*/
 
+// Avoid components with same names from different SVG files (use svg-inject.js)
+			svgElem = buildSvgElement(svg, false);
+			makeIdsUnique(svgElem, false);
+			svg = svgElemToSvgString(svgElem);
+// console.log(svg)
 
 // Remove white background to make it transparent
 
