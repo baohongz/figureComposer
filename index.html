@@ -1,33 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<!--[if lt IE 9]>
-	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>figureComposer</title>
+	<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/bootstrap.min.css">
+	<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/gridstack.css"/>
+	<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/trash.css"/>
+	<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/dropzone.css">
 
-	<link rel="stylesheet" href="dist/bootstrap.min.css">
-	<link rel="stylesheet" href="dist/gridstack.css"/>
-	<link rel="stylesheet" href="dist/trash.css"/>
-	<link rel="stylesheet" href="dist/dropzone.css">
-
-	<script src="dist/jquery.min.js"></script>
-	<script src="dist/jquery-ui.min.js"></script>
-	<script src="dist/bootstrap.min.js"></script>
-	<script src="dist/lodash.min.js"></script>
-	<script src="dist/gridstack.js"></script>
-	<script src="dist/gridstack.jQueryUI.js"></script>
-	<script src="dist/dropzone.js"></script>
-	<script src="dist/svg-pan-zoom.js"></script>
-	<script src="dist/svg-inject.js"></script>
-
-	<script src="dist/FileSaver.min.js"></script>
-	<script src="dist/tinymce/tinymce.min.js"></script>
+	<script src="https://baohongz.github.io/figureComposer/dist/jquery.min.js"></script>
+	<script src="https://baohongz.github.io/figureComposer/dist/jquery-ui.min.js"></script>
+	<script src="https://baohongz.github.io/figureComposer/dist/bootstrap.min.js"></script>
+	<script src="https://baohongz.github.io/figureComposer/dist/lodash.min.js"></script>
+	<script src="https://baohongz.github.io/figureComposer/dist/gridstack.js"></script>
+	<script src="https://baohongz.github.io/figureComposer/dist/gridstack.jQueryUI.js"></script>
+	<script src="https://baohongz.github.io/figureComposer/dist/dropzone.js"></script>
+	<script src="https://baohongz.github.io/figureComposer/dist/svg-pan-zoom.js"></script>
+	<script src="https://baohongz.github.io/figureComposer/dist/svg-inject.js"></script>
+	<script src="https://baohongz.github.io/figureComposer/dist/FileSaver.min.js"></script>
+	<script src="https://baohongz.github.io/figureComposer/dist/tinymce/tinymce.min.js"></script>
 
 	<style type="text/css">
 		.dropzone {
@@ -98,37 +91,33 @@
 		    margin-top: 0px;
 		    margin-bottom: 0px;
 		}
-
 	</style>
+	<script type="text/javascript">
+	  var editorConfig = {
+	    selector: '.tinymce-body',
+	    menubar: false,
+	    inline: true,
+	    plugins: [
+	      'link',
+		  'textcolor',
+	      'lists',
+	      'paste',
+	      'autolink'
+	    ],
+	    toolbar: [
+	      'spellchecker undo redo | bold italic underline | fontselect fontsizeselect',
+	      'forecolor backcolor | alignleft aligncenter alignright alignfull | numlist bullist outdent indent'
+	    ],
+	    valid_elements: 'p[style],strong,em,span[style],a[href],ul,ol,li',
+	    valid_styles: {
+	      '*': 'font-size,font-family,color,text-decoration,text-align'
+	    },
+	    content_css: [
+	      '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+	    ]
+	  };
+	</script>
 </head>
-<script type="text/javascript">
-  var emailBodyConfig = {
-    selector: '.tinymce-body',
-    menubar: false,
-    inline: true,
-    plugins: [
-      'link',
-	  'textcolor',
-      'lists',
-      'paste',
-      'autolink'
-    ],
-    toolbar: [
-      'spellchecker undo redo | bold italic underline | fontselect fontsizeselect',
-      'forecolor backcolor | alignleft aligncenter alignright alignfull | numlist bullist outdent indent'
-    ],
-    valid_elements: 'p[style],strong,em,span[style],a[href],ul,ol,li',
-    valid_styles: {
-      '*': 'font-size,font-family,color,text-decoration,text-align'
-    },
-    content_css: [
-      '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-    ]
-  };
-
- tinymce.init(emailBodyConfig);
-</script>
-
 
 <body>
 <div class="container" style="width:1152px;">
@@ -334,8 +323,8 @@
 		this.grid.enableMove(false, false);
 
 
-		this.addEditor = function (id) {
-			tinymce.init(emailBodyConfig);
+		this.initEditor = function (id) {
+			tinymce.init(editorConfig);
 		}
 
 		this.addNewWidget = function (myType) {
@@ -350,7 +339,7 @@ console.log(images);
 					svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><image width="600" height="600" xlink:href="'+images[0].src+'"/></svg>';
 				}
 			} else {
-				svg = '<svg xmlns="http://www.w3.org/2000/svg"><g fill=white stroke=white stroke-width=0><circle cx=0 cy=0 r=1/></g></svg>';
+				svg = '<svg xmlns="http://www.w3.org/2000/svg"><g fill=white stroke=white stroke-width=0><circle cx=0 cy=0 r=1></g></svg>';
 			}
 	
 			imageId = "plot"+num; 
@@ -391,7 +380,7 @@ console.log('width='+wm+' height='+hm);
 			svg = svg.replace(/=\"(#?)img(\d+)\"/ig, '=\"$1-img-'+num+'-$2\"');
 */
 
-// Avoid components with same names from different SVG files (use svg-inject.js)
+// Avoid components with same names from different SVG files (use SVGInsert, svg-inject.js)
 			svgElem = buildSvgElement(svg, false);
 			makeIdsUnique(svgElem, false);
 			svg = svgElemToSvgString(svgElem);
@@ -425,7 +414,7 @@ console.log($('#no-white-bg').prop('checked'));
 			}
 
 			var initZindex = num+60; 
-			var el = this.grid.addWidget($('<div class=image_div id='+imageId+'z style="z-index:'+initZindex+';"><div class="grid-stack-item-content col-xs-4"><div class="tinymce-body" id='+figureTitle+' align="left"  onclick="addEditor\('+figureTitle+'\);this.focus\(\);">'+textHint+'</div><div id="'+imageId+'_container" class='+myType+' style="width: 100%; height: 100%; ">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height);
+			var el = this.grid.addWidget($('<div class=image_div id='+imageId+'z style="z-index:'+initZindex+';"><div class="grid-stack-item-content col-xs-4"><div class="tinymce-body" id='+figureTitle+' align="left"  onclick="initEditor\('+figureTitle+'\);this.focus\(\);">'+textHint+'</div><div id="'+imageId+'_container" class='+myType+' style="width: 100%; height: 100%; ">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height);
 
 			num += 1;
 			$('#list-1').append('<div id='+imageId+'z_hdl class="dragzidx">'+imageId+'z</div>');
@@ -552,7 +541,8 @@ console.log(document.getElementById(myImg));
 	        });
 
 
-			var text = $("#block1").html();
+			var text = '<html>\n<head>\n'+$("head").html()+'<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/dropzone.css">\n</head>\n<body>\n';
+			text += $("#block3").html();
 //			text += '<div id=locsize style="display:none;">' + JSON.stringify(locsize) + '</div>';
 
 			for (var i=1; i<num; i++) {
@@ -561,7 +551,7 @@ console.log(document.getElementById(myImg));
 					continue;
 				}
 
-				text += '<div id="'+myImg+'_container" style="display:none;">';
+				text += '<div id="'+myImg+'_saved" style="display:none;">';
 
 				var svg = $('#'+myImg+'_container').html();
 				svg = svg.replace(/<g +id=\"svg-pan-zoom-controls\".+/, '<\/svg>');
@@ -579,52 +569,33 @@ console.log(document.getElementById(myImg));
 		});
 </script>
 
-<div id="block1" style="display:none;">
+<div id="block3" style="display:none;">
 <!--
-<html>
-<head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/bootstrap.min.css">
-	<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/gridstack.css"/>
-	<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/trash.css"/>
-	<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/dropzone.css">
-	<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/savehtml.css">
+<style type="text/css">
+	.grid-stack .grid-stack-item .grid-stack-item-content,
+	.grid-stack .grid-stack-item .placeholder-content {
+	    left: 0px;
+	    right: 0px;
+	    padding: 0px;
+		border: 0;
+	    overflow: hidden;
+	}
 
-	<script src="https://baohongz.github.io/figureComposer/dist/jquery.min.js"></script>
-	<script src="https://baohongz.github.io/figureComposer/dist/jquery-ui.min.js"></script>
-	<script src="https://baohongz.github.io/figureComposer/dist/bootstrap.min.js"></script>
-	<script src="https://baohongz.github.io/figureComposer/dist/lodash.min.js"></script>
-	<script src="https://baohongz.github.io/figureComposer/dist/gridstack.js"></script>
-	<script src="https://baohongz.github.io/figureComposer/dist/gridstack.jQueryUI.js"></script>
-	<script src="https://baohongz.github.io/figureComposer/dist/dropzone.js"></script>
-	<script src="https://baohongz.github.io/figureComposer/dist/svg-pan-zoom.js"></script>
-
-	<style type="text/css">
-		.grid-stack .grid-stack-placeholder > .placeholder-content {
-  			border: 1px dashed red;
-		}
-
-		.grid-stack .grid-stack-item .grid-stack-item-content,
-		.grid-stack .grid-stack-item .placeholder-content {
-			left: 0px;
-			right: 0px;
-			padding: 0px;
-			overflow: hidden;
-		}
-
-		.grid-stack {
-			background: lightgoldenrodyellow;
-			background: none;
-		}
-
-		.grid-stack-item-content {
-			background: none;
-			text-align: center;
-		}
-	</style>
-</head>
-
-<body>
+	
+	.grid-stack {
+	    background: white;
+		border: 0;
+	}
+	
+	.grid-stack-item-content {
+	    background: white;
+	    text-align: center;
+	}
+	
+	.svg-pan-zoom-control {display: none;}
+	.ui-draggable-handle {display: none;}
+	.no-print {display: none;}
+</style>
 <div class="container" style="width:1152px;">
 	<a class="btn btn-default btn-sm" id="toggle-control">Show/Hide Control</a><p>
 	<div class="row"> <div class="grid-stack">
@@ -660,21 +631,7 @@ console.log(document.getElementById(myImg));
 	this.grid.enableMove(false, false);
 
 
-	this.addSVG = function ( mysvg, num ) {
-		imageId = "plot"+num; 
-		var svg = mysvg;
-
-		svg.match(/width="(\d+)/);
-		var wm = RegExp.$1;
-
-		svg.match(/height="(\d+)/);
-		var hm = RegExp.$1;
-
-//		svg = svg.replace(/.*<svg[^>]+>/i, '<svg id="'+imageId+'" style="display: inline; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; " width="'+wm+'" height="'+hm+'" viewBox="0 0 '+wm+' '+hm+'"  version="1.1">');
-//		svg = svg.replace(/<g +id=\"svg-pan-zoom-controls\".+/, '<\/svg>');
-//		svg = svg.replace(/<g[^>]+svg-pan-zoom_viewport[^>]+>/, '');
-//		svg = svg.replace(/clipPath id=\"/ig, 'clipPath id=\"'+num);
-
+	this.addSVG = function ( svg, imageId ) {
 		var node = locsize[imageId];
 
 		var figureTitle = imageId+"_title";
@@ -704,9 +661,10 @@ console.log(document.getElementById(myImg));
 			myCTM = CTMs[e.target.id];
 			$('#'+e.target.id)[0].querySelector('.svg-pan-zoom_viewport').setAttribute('transform', myCTM);
 			$('#'+e.target.id)[0].querySelector('.svg-pan-zoom_viewport').style.transform = myCTM;
+			$('#'+e.target.id+'_saved').remove();
         }
 
-		this.addSVG ($('#'+myImg+'_container').html(), i);
+		this.addSVG ($('#'+myImg+'_saved').html(), myImg);
 
 		var panZoom = svgPanZoom('#'+myImg, {
                     zoomEnabled:true,
