@@ -1,685 +1,681 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>figureComposer</title>
-	<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/bootstrap.min.css">
-	<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/gridstack.css"/>
-	<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/trash.css"/>
-	<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/dropzone.css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>figureComposer</title>
+  <link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/bootstrap.min.css">
+  <link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/gridstack.css"/>
+  <link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/trash.css"/>
+  <link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/dropzone.css">
 
-	<script src="https://baohongz.github.io/figureComposer/dist/jquery.min.js"></script>
-	<script src="https://baohongz.github.io/figureComposer/dist/jquery-ui.min.js"></script>
-	<script src="https://baohongz.github.io/figureComposer/dist/bootstrap.min.js"></script>
-	<script src="https://baohongz.github.io/figureComposer/dist/lodash.min.js"></script>
-	<script src="https://baohongz.github.io/figureComposer/dist/gridstack.js"></script>
-	<script src="https://baohongz.github.io/figureComposer/dist/gridstack.jQueryUI.js"></script>
-	<script src="https://baohongz.github.io/figureComposer/dist/dropzone.js"></script>
-	<script src="https://baohongz.github.io/figureComposer/dist/svg-pan-zoom.js"></script>
-	<script src="https://baohongz.github.io/figureComposer/dist/svg-inject.js"></script>
-	<script src="https://baohongz.github.io/figureComposer/dist/FileSaver.min.js"></script>
-	<script src="https://baohongz.github.io/figureComposer/dist/tinymce/tinymce.min.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/jquery.min.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/jquery-ui.min.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/bootstrap.min.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/lodash.min.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/gridstack.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/gridstack.jQueryUI.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/dropzone.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/svg-pan-zoom.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/svg-inject.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/FileSaver.min.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/tinymce/tinymce.min.js"></script>
 
-	<style type="text/css">
-		.dropzone {
-			background: white;
-			border-radius: 5px;
-			padding: 10px 10px;
-			border: 2px dashed rgb(0, 135, 247);
-			border-image: none;
-			width: 100%;
-			height: 100%;
-			margin-left: auto;
-			margin-right: auto;
-		}
-		.dropzone .dz-message {
-    			margin: 1em 0;
-		}
-		.dragzidx {cursor: move;margin:2px;padding:2px;background:rgb(0, 135, 247);color:white;border-radius: 2px; width:55px; height:22px;}
+  <style type="text/css">
+    .dropzone {
+      background: white;
+      border-radius: 5px;
+      padding: 10px 10px;
+      border: 2px dashed rgb(0, 135, 247);
+      border-image: none;
+      width: 100%;
+      height: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .dropzone .dz-message {
+      margin: 1em 0;
+    }
+    .dragzidx {cursor: move;margin:2px;padding:2px;background:rgb(0, 135, 247);color:white;border-radius: 2px; width:55px; height:22px;}
 
-		.trash {
-			height: 200px;
-//			background-color: #f5f5f5 !important;
-		}
+    .trash {
+      height: 200px;
+//    background-color: #f5f5f5 !important;
+    }
 
-		.grid-stack .grid-stack-placeholder > .placeholder-content {
-  			border: 1px dashed red;
-		}
+    .grid-stack .grid-stack-placeholder > .placeholder-content {
+      border: 1px dashed red;
+    }
 
-		.grid-stack .grid-stack-item .grid-stack-item-content,
-		.grid-stack .grid-stack-item .placeholder-content {
-			left: 0px;
-			right: 0px;
-			padding: 0px;
-			border: 1px dashed red;	
-			overflow: hidden;
-		}
+    .grid-stack .grid-stack-item .grid-stack-item-content,
+    .grid-stack .grid-stack-item .placeholder-content {
+      left: 0px;
+      right: 0px;
+      padding: 0px;
+      border: 1px dashed red;  
+      overflow: hidden;
+    }
 
-		.grid-stack {
-			background: lightgoldenrodyellow;
-//			background: lightblue;
-			background: white;
-			border: 1px solid rgb(0, 135, 247);
-		}
+    .grid-stack {
+      background: lightgoldenrodyellow;
+      background: white;
+      border: 1px solid rgb(0, 135, 247);
+    }
 
-		.grid-stack-item-content {
-			background: none;
-			text-align: center;
-		}
+    .grid-stack-item-content {
+      background: none;
+      text-align: center;
+    }
 
-		@media print {
-			.svg-pan-zoom-control {display: none;}
-			.no-print {display: none;}
-			#dragHandle {display: none;}
-			.grid-stack {background: none; border:none;}
-			.grid-stack .grid-stack-item .grid-stack-item-content,
-			.grid-stack .grid-stack-item .placeholder-content { border: none; }
-		}
+    @media print {
+      .svg-pan-zoom-control {display: none;}
+      .no-print {display: none;}
+      #dragHandle {display: none;}
+      .grid-stack {background: none; border:none;}
+      .grid-stack .grid-stack-item .grid-stack-item-content,
+      .grid-stack .grid-stack-item .placeholder-content { border: none; }
+    }
 
-		#dragHandle {
-			z-index: 999; width:16px; height: 16px; border-bottom: 0px solid #44c756;
-			border-left: 0px solid #44c765; position: absolute;
-			right: 0px; top: 0px; cursor: move;
-			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABQklEQVR42pWTS0/CQBSFz0S60VQwUK0gFsWYsDBuZOHGxF9O4sYFbowLEyPaikWUNuERdYHmektL6SMd8CaTzpw552tmeisgq30ivAghswhZ2DgHrGueSyAiM9wEBq+AtseQdjYkLVZuCMrxbFo+VdG7nfj69AGwz4QcoHO4H5hqY8rXVYw6DDA3RWo/Bah+0uzZ3QgB6xUVX3YEkPSEAH1MCpun9mSBzvEoqoDL2k/klQZrFmt9HyqwMyDoJcDLqpGwV988lMShPW2Lh+kA71pwsyWGbDPkw4mb66x1EprBmsWao4n4HRR7/vncsgjXjV3g/i2uRT2pr1C4IgwvAnOXcMJNcMfN4FZFaj+zDwotwtqRP58DvPp9BIaXS/pgXnmT0DQW67YFjGordmIIeWLIAYefOXz4z38hCpGElwNWqD88CnURPEHKNgAAAABJRU5ErkJggg==');
-		}
-		p {
-    		margin: 0 0 0px;
-		}
-		h1, .h1, h2, .h2, h3, .h3 {
-		    margin-top: 0px;
-		    margin-bottom: 0px;
-		}
-	</style>
-	<script type="text/javascript">
-	  var editorConfig = {
-	    selector: '.tinymce-body',
-	    menubar: false,
-	    inline: true,
-	    plugins: [
-	      'link',
-		  'textcolor',
-	      'lists',
-	      'paste',
-	      'autolink'
-	    ],
-	    toolbar: [
-	      'spellchecker undo redo | bold italic underline | fontselect fontsizeselect',
-	      'forecolor backcolor | alignleft aligncenter alignright alignfull | numlist bullist outdent indent'
-	    ],
-	    valid_elements: 'p[style],strong,em,span[style],a[href],ul,ol,li',
-	    valid_styles: {
-	      '*': 'font-size,font-family,color,text-decoration,text-align'
-	    },
-	    content_css: [
-	      '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-	    ]
-	  };
-	</script>
+    #dragHandle {
+      z-index: 999; width:16px; height: 16px; border-bottom: 0px solid #44c756;
+      border-left: 0px solid #44c765; position: absolute;
+      right: 0px; top: 0px; cursor: move;
+      background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABQklEQVR42pWTS0/CQBSFz0S60VQwUK0gFsWYsDBuZOHGxF9O4sYFbowLEyPaikWUNuERdYHmektL6SMd8CaTzpw552tmeisgq30ivAghswhZ2DgHrGueSyAiM9wEBq+AtseQdjYkLVZuCMrxbFo+VdG7nfj69AGwz4QcoHO4H5hqY8rXVYw6DDA3RWo/Bah+0uzZ3QgB6xUVX3YEkPSEAH1MCpun9mSBzvEoqoDL2k/klQZrFmt9HyqwMyDoJcDLqpGwV988lMShPW2Lh+kA71pwsyWGbDPkw4mb66x1EprBmsWao4n4HRR7/vncsgjXjV3g/i2uRT2pr1C4IgwvAnOXcMJNcMfN4FZFaj+zDwotwtqRP58DvPp9BIaXS/pgXnmT0DQW67YFjGordmIIeWLIAYefOXz4z38hCpGElwNWqD88CnURPEHKNgAAAABJRU5ErkJggg==');
+    }
+    p {
+      margin: 0 0 0px;
+    }
+    h1, .h1, h2, .h2, h3, .h3 {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+  </style>
+  <script type="text/javascript">
+    var editorConfig = {
+      selector: '.tinymce-body',
+      menubar: false,
+      inline: true,
+      plugins: [
+        'link',
+        'textcolor',
+        'lists',
+        'paste',
+        'autolink'
+      ],
+      toolbar: [
+        'spellchecker undo redo | bold italic underline | fontselect fontsizeselect',
+        'forecolor backcolor | alignleft aligncenter alignright alignfull | numlist bullist outdent indent'
+      ],
+      valid_elements: 'p[style],strong,em,span[style],a[href],ul,ol,li',
+      valid_styles: {
+        '*': 'font-size,font-family,color,text-decoration,text-align'
+      },
+      content_css: [
+        '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+      ]
+    };
+  </script>
 </head>
 
 <body>
 <div class="container" style="width:1152px;">
-	<div class="row no-print">
-		<div align=center>
-			<a class="btn btn-default" id="add-new-Text">Add Text Box</a>
-			<a class="btn btn-default" id="add-new-Control">Add Control</a>
-			<a class="btn btn-default" id="save-HTML">Save as HTML</a>
-			<a class="btn btn-default" href=figure/Fig1.html target=_blank>Demo1</a>
-			<a class="btn btn-default" href=figure/Fig.s5.html target=_blank>Demo2</a>
-			<a class="btn btn-default" href=violin.html target=_blank>Violin Plot</a>
-			<a class="btn btn-default" href=demo_video.html target=_blank>Help</a>
-			<input type="checkbox" class="custom-control-input" id="no-white-bg" checked>
-			<label class="custom-control-label" for="no-white-bg">No White Background</label>
-   		</div>
-	</div>
-	<div class="row no-print" style="padding-top:5px">
-		<div id="list-1" style="width:80px;height:200px;overflow:auto;border:1px dashed red;float:left;"></div>
-		<div align=center class="col-xs-4" style="height:200px">
-			<FORM class="dropzone needsclick" id="dropzoneUpload" action="/">
-			<div class="dz-message needsclick">Drop a SVG (high resolution), JPEG, GIF or PNG file here or click here to upload. Click "Add Text Box" to add a text input box to the canvas. Click and select text to format. Note: use open-source tool <b>Inkscape</b> (https://inkscape.org) to convert other formats to one of the acceptable formats, preferably SVG.</div>
-			</FORM>
-		</div>
-		<div align=center class="col-xs-4">
-			<div class="trash"></div>
-		</div>
-		<div align=center class="col-xs-3"><img width=240 height=200 src=figureComposer_help.png></div>
-	</div> 
-	<div class="row" id="plotcanvas">
-		<div class="grid-stack"></div>
-	</div>
+  <div class="row no-print">
+    <div align=center>
+      <a class="btn btn-default" id="add-new-Text">Add Text Box</a>
+      <a class="btn btn-default" id="add-new-Control">Add Control</a>
+      <a class="btn btn-default" id="save-HTML">Save as HTML</a>
+      <a class="btn btn-default" href=figure/Fig1.html target=_blank>Demo1</a>
+      <a class="btn btn-default" href=figure/Fig.s5.html target=_blank>Demo2</a>
+      <a class="btn btn-default" href=violin.html target=_blank>Violin Plot</a>
+      <a class="btn btn-default" href=demo_video.html target=_blank>Help</a>
+      <input type="checkbox" class="custom-control-input" id="no-white-bg" checked>
+      <label class="custom-control-label" for="no-white-bg">No White Background</label>
+    </div>
+  </div>
+  <div class="row no-print" style="padding-top:5px">
+    <div id="list-1" style="width:80px;height:200px;overflow:auto;border:1px dashed red;float:left;"></div>
+    <div align=center class="col-xs-4" style="height:200px">
+      <FORM class="dropzone needsclick" id="dropzoneUpload" action="/">
+      <div class="dz-message needsclick">Drop a SVG (high resolution), JPEG, GIF or PNG file here or click here to upload. Click "Add Text Box" to add a text input box to the canvas. Click and select text to format. Note: use open-source tool <b>Inkscape</b> (https://inkscape.org) to convert other formats to one of the acceptable formats, preferably SVG.</div>
+      </FORM>
+    </div>
+    <div align=center class="col-xs-4">
+      <div class="trash"></div>
+    </div>
+    <div align=center class="col-xs-3"><img width=240 height=200 src=figureComposer_help.png></div>
+  </div> 
+  <div class="row" id="plotcanvas">
+    <div class="grid-stack"></div>
+  </div>
 </div>
 
-
 <script type="text/javascript">
-	var myFile = null;
-	var num = 1;
-	var imageId;
-	var div_id;
+  var myFile = null;
+  var num = 1;
+  var imageId;
+  var div_id;
 
 
-	$("#list-1").sortable({
-		start: function( event, ui ) {
-			div_id = event.toElement.id.replace(/_hdl/,'');
-			$('#'+div_id).css( "background-color", "lightgoldenrodyellow");	
-		},
-		stop: function( event, ui ) {
-			div_id = event.toElement.id.replace(/_hdl/,'');
-			$('#'+div_id).css( "background-color", 'transparent');
+  $("#list-1").sortable({
+    start: function( event, ui ) {
+      div_id = event.toElement.id.replace(/_hdl/,'');
+      $('#'+div_id).css( "background-color", "lightgoldenrodyellow");  
+    },
+    stop: function( event, ui ) {
+      div_id = event.toElement.id.replace(/_hdl/,'');
+      $('#'+div_id).css( "background-color", 'transparent');
 
-			var itemOrder = $('#list-1').sortable("toArray");
+      var itemOrder = $('#list-1').sortable("toArray");
 
-      		for (var i = 0; i < itemOrder.length; i++) {
-				div_id = itemOrder[i].replace(/_hdl/,'');
-				$('#'+div_id).css( "z-index" , i+60 );
+      for (var i = 0; i < itemOrder.length; i++) {
+        div_id = itemOrder[i].replace(/_hdl/,'');
+        $('#'+div_id).css( "z-index" , i+60 );
 // console.log("Position: " + i + " ID: " + div_id);
-			}
-		}
-	});
+      }
+    }
+  });
 
 
-	// Prevent from dropping a plot to unwanted zone
-	window.addEventListener("dragover", function (e) {
-	    e.preventDefault();
-		return;
-	});
-	window.addEventListener("drop", function (e) {
-	    e.preventDefault();
-		return;
-	});
+  // Prevent from dropping a plot to unwanted zone
+  window.addEventListener("dragover", function (e) {
+    e.preventDefault();
+    return;
+  });
+  window.addEventListener("drop", function (e) {
+    e.preventDefault();
+    return;
+  });
+
+  function parseStyles( styleTag ) {
+    if ( !styleTag ) {
+      return {};
+    }
+    
+    const classCollection = {};
+    
+    const plain = styleTag.innerHTML.replace(/\s/g,'').toLowerCase();
+
+    const regex = /([^\s{]+)[\s]*\{([\s\S]+?)\}/;
+    const propertyRegex = /([\w\-]+)[\s]*:[\s]*([^;]+)/;
+    const result = plain.match( new RegExp( regex, 'g' ) );
+    if ( result ) {
+      result.forEach( c => {
+        const classResult = c.match( regex );
+        const propertiesResult = classResult[ 2 ].match( new RegExp( propertyRegex, 'g' ) );
+        const properties = propertiesResult.reduce( ( collection, item ) => {
+          const p = item.match( propertyRegex );
+          collection[ p[ 1 ] ] = p[ 2 ];
+          return collection;
+        },{});
+        
+        subclass = classResult[ 1 ].split(','); // Baoohng: multiple classes share one style
+        subclass.forEach ( sc => {
+          sc = sc.replace(/^\./,'');
+          sc = sc.replace(/.*cls/,'cls');
+          if (!classCollection[ sc ]) {
+                classCollection[ sc ] = properties;
+          } else {
+            classCollection[ sc ] = Object.assign(classCollection[sc], properties);
+          }
+        });
+      });
+      return classCollection;
+    }
+    return {};
+  }
+  
+  function applyProperties( element, properties ) {
+    if ( !properties ) {
+      return;
+    }
+    
+    Object.keys( properties ).forEach( key => {
+      element.style[ key ] = properties[ key ];
+    });
+  }
+  
+  function applyStyles( element, styles ) {
+    const classNames = ( element.getAttribute( 'class' ) || '' ).split( ' ' );
+    classNames.forEach( c => {
+      applyProperties( element, styles[ c ] );
+    });
+    element.setAttribute( 'class', '' );
+  }
+
+  Dropzone.options.dropzoneUpload = {
+    maxFiles:1,
+    maxFilesize:256,
+    maxThumbnailFilesize:256,   
+    resizeQuality: 1,
+    thumbnailWidth: null,
+    thumbnailHeight: null,
+    withCredentials: true,
+    addRemoveLinks:true,
+
+    init:function(){
+      this.on("maxfilesexceeded",function(file){
+        this.removeAllFiles();
+        this.addFile(file);
+      });
+      this.on("success", function(file) {
+        myFile = file;
+
+        if (file.type.match(/image.*/)) {
+          var img = $(file.previewTemplate).find("img");
+          img[0].width = 120;
+          img[0].height = 120;
+        } else {
+          var fileReader = new FileReader;
+          fileReader.onload = function(event) {
+            var doc = document.createElement('div');
+            doc.innerHTML = event.target.result.replace(/^.*?<body>(.*?)<\/body>.*?$/s,"$1");
+            console.log(doc);
+            myFile = null;
+          }
+          fileReader.readAsText(file);
+        }
+      });
+      this.on("previewReady", function(file) {
+        addNewWidget("plot-box");
+        this.removeAllFiles();
+        myFile = null;
+      });
+      this.on("removedfile", function(file) {
+        myFile = null;
+      });
+    }
+  }
+
+  var options = {
+    removable: '.trash',
+    removeTimeout: 100,
+    verticalMargin: 0,
+    cellHeight: 6,
+    resizable: { handles: 'se, sw' },
+//  alwaysShowResizeHandle: true,
+    float: true
+  };
+
+  this.items = [
+    {x: 40, y: 60, width:  8, height: 30},
+    {x: 32, y: 60, width:  8, height: 30},
+    {x: 24, y: 60, width:  8, height: 30},
+    {x: 16, y: 60, width:  8, height: 30},
+    {x:  8, y: 60, width:  8, height: 30},
+    {x:  0, y: 60, width:  8, height: 30},
+    {x: 16, y: 30, width:  8, height: 30},
+    {x:  8, y: 30, width:  8, height: 30},
+    {x:  0, y: 30, width:  8, height: 30},
+    {x: 16, y:  0, width:  8, height: 30},
+    {x:  8, y:  0, width:  8, height: 30},
+    {x:  0, y:  0, width:  8, height: 30}
+  ];
+
+  $('.grid-stack').gridstack(options);
+
+  $('.grid-stack').on('dragstop', function (event, ui) {
+    var element = $(event.target);
+    var node = element.data('_gridstack_node');
+    var removeId = ui.helper.context.id+'_hdl';
+    if (node._isAboutToRemove) {
+      $('#'+removeId).remove();
+    }
+  });
 
 
-	function parseStyles( styleTag ) {
-	  if ( !styleTag ) {
-	    return {};
-	  }
-	  
-	  const classCollection = {};
-	  
-	  const plain = styleTag.innerHTML.replace(/\s/g,'').toLowerCase();
-
-	  const regex = /([^\s{]+)[\s]*\{([\s\S]+?)\}/;
-	  const propertyRegex = /([\w\-]+)[\s]*:[\s]*([^;]+)/;
-	  const result = plain.match( new RegExp( regex, 'g' ) );
-	  if ( result ) {
-	    result.forEach( c => {
-	      const classResult = c.match( regex );
-	      const propertiesResult = classResult[ 2 ].match( new RegExp( propertyRegex, 'g' ) );
-	      const properties = propertiesResult.reduce( ( collection, item ) => {
-	        const p = item.match( propertyRegex );
-	        collection[ p[ 1 ] ] = p[ 2 ];
-	        return collection;
-	      }, {} );
-	      
-		  subclass = classResult[ 1 ].split(','); // Baoohng: Multiple classes, one style
-		  subclass.forEach ( sc => {
-			sc = sc.replace(/^\./,'');
-			sc = sc.replace(/.*cls/,'cls');
-			if (!classCollection[ sc ]) {
-		      	classCollection[ sc ] = properties;
-			} else {
-				classCollection[ sc ] = Object.assign(classCollection[sc], properties);
-		    }
-		  });
-	    } );
-	    
-	    return classCollection;
-	  }
-	  
-	  return {};
-	}
+  this.grid = $('.grid-stack').data('gridstack');
+  this.grid.enableMove(false, false);
 
 
-	
-	function applyProperties( element, properties ) {
-	  if ( !properties ) {
-	    return;
-	  }
-	  
-	  Object.keys( properties ).forEach( key => {
-	    element.style[ key ] = properties[ key ];
-	  } );
-	}
-	
-	function applyStyles( element, styles ) {
-	  const classNames = ( element.getAttribute( 'class' ) || '' ).split( ' ' );
-	  classNames.forEach( c => {
-	    applyProperties( element, styles[ c ] );
-	  } );
-	  element.setAttribute( 'class', '' );
-	}
+  this.initEditor = function (id) {
+    tinymce.init(editorConfig);
+  }
 
-		Dropzone.options.dropzoneUpload = {
-			maxFiles:1,
-			maxFilesize:256,
-            maxThumbnailFilesize:256,   
-			resizeQuality: 1,
-			thumbnailWidth: null,
-			thumbnailHeight: null,
-			withCredentials: true,
-			addRemoveLinks:true,
-
-			init:function(){
-				this.on("maxfilesexceeded",function(file){
-					this.removeAllFiles();
-					this.addFile(file);
-				});
-	  			this.on("success", function(file) {
-					myFile = file;
-					var img = $(file.previewTemplate).find("img");
-					img[0].width = 120;
-					img[0].height = 120;
-	  			});
-				this.on("previewReady", function(file) {
-					addNewWidget("plot-box");
-					this.removeAllFiles();
-					myFile = null;
-				});
-				this.on("removedfile", function(file) {
-					myFile = null;
-				});
-			}
-		}
-
-		var options = {
-			removable: '.trash',
-			removeTimeout: 100,
-			verticalMargin: 0,
-			cellHeight: 6,
-			resizable: { handles: 'se, sw' },
-//			alwaysShowResizeHandle: true,
-			float: true
-		};
-
-		this.items = [
-			{x: 40, y: 60, width:  8, height: 30},
-			{x: 32, y: 60, width:  8, height: 30},
-			{x: 24, y: 60, width:  8, height: 30},
-			{x: 16, y: 60, width:  8, height: 30},
-			{x:  8, y: 60, width:  8, height: 30},
-			{x:  0, y: 60, width:  8, height: 30},
-			{x: 16, y: 30, width:  8, height: 30},
-			{x:  8, y: 30, width:  8, height: 30},
-			{x:  0, y: 30, width:  8, height: 30},
-			{x: 16, y:  0, width:  8, height: 30},
-			{x:  8, y:  0, width:  8, height: 30},
-			{x:  0, y:  0, width:  8, height: 30}
-		];
-
-		$('.grid-stack').gridstack(options);
-
-		$('.grid-stack').on('dragstop', function (event, ui) {
-		    var element = $(event.target);
-		    var node = element.data('_gridstack_node');
-			var removeId = ui.helper.context.id+'_hdl';
-			if (node._isAboutToRemove) {
-				$('#'+removeId).remove();
-			}
-		});
-
-
-		this.grid = $('.grid-stack').data('gridstack');
-		this.grid.enableMove(false, false);
-
-
-		this.initEditor = function (id) {
-			tinymce.init(editorConfig);
-		}
-
-		this.addNewWidget = function (myType) {
-			var svg = null;
+  this.addNewWidget = function (myType) {
+    var svg = null;
 console.log(myType);
-			if (myType == "plot-box") {
-				var images = myFile.previewElement.querySelectorAll("[data-dz-thumbnail]");
-console.log(images);
-				if (images[0].src.match(/^data:image\/svg/)) {
-					svg = decodeURIComponent(escape(atob(images[0].src.replace(/^data:image\/.*;base64,/, ""))));
-				} else {
-					svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><image width="600" height="600" xlink:href="'+images[0].src+'"/></svg>';
-				}
-			} else {
-				svg = '<svg xmlns="http://www.w3.org/2000/svg"><g fill=white stroke=white stroke-width=0><circle cx=0 cy=0 r=1></g></svg>';
-			}
-	
-			imageId = "plot"+num; 
-			var wm=20, hm=20;
+    if (myType == "plot-box") {
+      var images = myFile.previewElement.querySelectorAll("[data-dz-thumbnail]");
+      if (images[0].src.match(/^data:image\/svg/)) {
+        svg = decodeURIComponent(escape(atob(images[0].src.replace(/^data:image\/.*;base64,/, ""))));
+      } else {
+        svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><image width="600" height="600" xlink:href="'+images[0].src+'"/></svg>';
+      }
+    } else {
+      svg = '<svg xmlns="http://www.w3.org/2000/svg"><g fill=white stroke=white stroke-width=0><circle cx=0 cy=0 r=1></g></svg>';
+    }
 
-			svg = svg.replace(/(\r\n|\n|\r)/gm,"").replace(/\s+/gm, " ");
+    imageId = "plot"+num; 
+    var wm=20, hm=20;
 
-			if (svg.match(/viewBox=["|'][0-9.]+\s+[0-9.]+\s+([0-9.]+)\s+([0-9.]+)/)) {
-				wm = RegExp.$1;
-				hm = RegExp.$2;
-			}
-			if (wm <= 20 || hm <= 20) { 
-				if (svg.match(/ width="(\d+)/)) {
-					wm = RegExp.$1;
-				} else {
-					wm = 800;
-				}
-				if (svg.match(/ height="(\d+)/)) {
-					hm = RegExp.$1;
-				} else {
-					hm = 800;
-				}
-			}
+    svg = svg.replace(/(\r\n|\n|\r)/gm,"").replace(/\s+/gm, " ");
+
+    if (svg.match(/viewBox=["|'][0-9.]+\s+[0-9.]+\s+([0-9.]+)\s+([0-9.]+)/)) {
+      wm = RegExp.$1;
+      hm = RegExp.$2;
+    }
+    if (wm <= 20 || hm <= 20) { 
+      if (svg.match(/ width="(\d+)/)) {
+        wm = RegExp.$1;
+      } else {
+        wm = 800;
+      }
+      if (svg.match(/ height="(\d+)/)) {
+        hm = RegExp.$1;
+      } else {
+        hm = 800;
+      }
+    }
 console.log('width='+wm+' height='+hm);
 
-			svg = svg.replace(/.*?<svg[^>]+>/i, '<svg xmlns="http://www.w3.org/2000/svg" id="'+imageId+'" style="display: inline; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; " width="'+wm+'" height="'+hm+'" viewBox="0 0 '+wm+' '+hm+'" version="1.1">');
+    svg = svg.replace(/.*?<svg[^>]+>/i, '<svg xmlns="http://www.w3.org/2000/svg" id="'+imageId+'" style="display: inline; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; " width="'+wm+'" height="'+hm+'" viewBox="0 0 '+wm+' '+hm+'" version="1.1">');
 
-			svg = svg.replace(/<g +id=\"svg-pan-zoom-controls\".+/, '<\/svg>').replace(/<g[^>]+svg-pan-zoom_viewport[^>]+>/, '');
+    svg = svg.replace(/<g +id=\"svg-pan-zoom-controls\".+/, '<\/svg>').replace(/<g[^>]+svg-pan-zoom_viewport[^>]+>/, '');
 
 
 // Avoid components with same names from different SVG files (old)
 /*
-			svg = svg.replace(/glyph(\d+)-(\d+)/ig, 'glyph-'+num+'-$1-$2');
-			svg = svg.replace(/clipPath id=\"clip(\d+)\"/ig, 'clipPath id=\"clip-'+num+'-$1\"');
-			svg = svg.replace(/clip-path=\"url\(#clip(\d+)\)\"/ig, 'clip-path=\"url\(#clip-'+num+'-$1\)\"');
-			svg = svg.replace(/id=\"path(\d+)\"/ig, 'id=\"path-'+num+'-$1\"');
+    svg = svg.replace(/glyph(\d+)-(\d+)/ig, 'glyph-'+num+'-$1-$2');
+    svg = svg.replace(/clipPath id=\"clip(\d+)\"/ig, 'clipPath id=\"clip-'+num+'-$1\"');
+    svg = svg.replace(/clip-path=\"url\(#clip(\d+)\)\"/ig, 'clip-path=\"url\(#clip-'+num+'-$1\)\"');
+    svg = svg.replace(/id=\"path(\d+)\"/ig, 'id=\"path-'+num+'-$1\"');
 // MS PPT exports
-			svg = svg.replace(/=\"(#?)img(\d+)\"/ig, '=\"$1-img-'+num+'-$2\"');
+    svg = svg.replace(/=\"(#?)img(\d+)\"/ig, '=\"$1-img-'+num+'-$2\"');
 */
 
 // Avoid components with same names from different SVG files (use SVGInsert, svg-inject.js)
-			svgElem = buildSvgElement(svg, false);
-			makeIdsUnique(svgElem, false);
-			svg = svgElemToSvgString(svgElem);
+    svgElem = buildSvgElement(svg, false);
+    makeIdsUnique(svgElem, false);
+    svg = svgElemToSvgString(svgElem);
 // console.log(svg)
 
 // Remove white background to make it transparent
 
-			if ($('#no-white-bg').prop('checked')) {
+    if ($('#no-white-bg').prop('checked')) {
 console.log($('#no-white-bg').prop('checked'));
-				svg = svg.replace(/<path fill=\"#FFF\"[^>]+d=\"[^>]*M[^>]+h[^>]+v[^>]+H[^>]+z\"\/>/g,"");
-				svg = svg.replace(/<path fill=\"rgb\(255,255,255\)\"[^>]+d=\"[^>]*M[^>]+L[^>]+L[^>]+L[^>]+Z\"\/>/,"");
-				svg = svg.replace(/<rect fill=\"rgb\(255,255,255\)\"[^>]+x=[^>]+\"\/>/,"");
-	// R: <rect x="0" y="0" width="468" height="468" style="fill:rgb(100%,100%,100%);fill-opacity:1;stroke:none;"/>
-				svg = svg.replace(/<rect x=\"0\" y=\"0\"[^>]+style=\"fill:rgb\(100\%,100\%,100\%\);fill-opacity:1;[^>]+\"\/>/g,"");
-				svg = svg.replace(/fill:rgb\(100\%,100\%,100\%\);fill-opacity:1;/g,"fill:rgb\(100\%,100\%,100\%\);fill-opacity:0;");
-				svg = svg.replace(/<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'\/>/g,"");
-	
-				svg = svg.replace(/background:\s+white;/g,"");
-			}
+      svg = svg.replace(/<path fill=\"#FFF\"[^>]+d=\"[^>]*M[^>]+h[^>]+v[^>]+H[^>]+z\"\/>/g,"");
+      svg = svg.replace(/<path fill=\"rgb\(255,255,255\)\"[^>]+d=\"[^>]*M[^>]+L[^>]+L[^>]+L[^>]+Z\"\/>/,"");
+      svg = svg.replace(/<rect fill=\"rgb\(255,255,255\)\"[^>]+x=[^>]+\"\/>/,"");
+// R: <rect x="0" y="0" width="468" height="468" style="fill:rgb(100%,100%,100%);fill-opacity:1;stroke:none;"/>
+      svg = svg.replace(/<rect x=\"0\" y=\"0\"[^>]+style=\"fill:rgb\(100\%,100\%,100\%\);fill-opacity:1;[^>]+\"\/>/g,"");
+      svg = svg.replace(/fill:rgb\(100\%,100\%,100\%\);fill-opacity:1;/g,"fill:rgb\(100\%,100\%,100\%\);fill-opacity:0;");
+      svg = svg.replace(/<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'\/>/g,"");
 
-			var node = this.items.pop();
+      svg = svg.replace(/background:\s+white;/g,"");
+    }
 
-			if (node == null) {
-				node =  { x: 0, y: 90, width: 8, height: 30 };
-			}
+    var node = this.items.pop();
 
-			var figureTitle = imageId+"_title";
-			var textHint = "&nbsp;";
-			if (myType == "text-box") {
-				textHint = "Type in text";
-			}
+    if (node == null) {
+      node =  { x: 0, y: 90, width: 8, height: 30 };
+    }
 
-			var initZindex = num+60; 
-			var el = this.grid.addWidget($('<div class=image_div id='+imageId+'z style="z-index:'+initZindex+';"><div class="grid-stack-item-content col-xs-4"><div class="tinymce-body" id='+figureTitle+' align="left"  onclick="initEditor\('+figureTitle+'\);this.focus\(\);">'+textHint+'</div><div id="'+imageId+'_container" class='+myType+' style="width: 100%; height: 100%; ">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height);
+    var figureTitle = imageId+"_title";
+    var textHint = "&nbsp;";
+    if (myType == "text-box") {
+      textHint = "Type in text";
+    }
 
-			num += 1;
-			$('#list-1').append('<div id='+imageId+'z_hdl class="dragzidx">'+imageId+'z</div>');
+    var initZindex = num+60; 
+    var el = this.grid.addWidget($('<div class=image_div id='+imageId+'z style="z-index:'+initZindex+';"><div class="grid-stack-item-content col-xs-4"><div class="tinymce-body" id='+figureTitle+' align="left"  onclick="initEditor\('+figureTitle+'\);this.focus\(\);">'+textHint+'</div><div id="'+imageId+'_container" class='+myType+' style="width: 100%; height: 100%; ">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height);
 
-			$('#'+imageId+'z_hdl').hover(
-				function () {
+    num += 1;
+    $('#list-1').append('<div id='+imageId+'z_hdl class="dragzidx">'+imageId+'z</div>');
+
+    $('#'+imageId+'z_hdl').hover(
+      function () {
 // Baohong: textContent is the text in <div> tag
-					div_id = this.textContent;
-					$('#'+div_id).css("background-color", 'lightgoldenrodyellow');
-					$('#'+div_id+'_hdl').css("background-color", 'lightgoldenrodyellow');
-					$('#'+div_id+'_hdl').css("color", 'black');
-				},
-				function () {
-					div_id = this.textContent;
-					$('#'+div_id).css("background-color", 'transparent');
-					$('#'+div_id+'_hdl').css("background-color", 'rgb(0, 135, 247)');
-					$('#'+div_id+'_hdl').css("color", 'white');
-				}
-			);
+        div_id = this.textContent;
+        $('#'+div_id).css("background-color", 'lightgoldenrodyellow');
+        $('#'+div_id+'_hdl').css("background-color", 'lightgoldenrodyellow');
+        $('#'+div_id+'_hdl').css("color", 'black');
+      },
+      function () {
+        div_id = this.textContent;
+        $('#'+div_id).css("background-color", 'transparent');
+        $('#'+div_id+'_hdl').css("background-color", 'rgb(0, 135, 247)');
+        $('#'+div_id+'_hdl').css("color", 'white');
+      }
+    );
 
 
-			svgobj = el[0].firstChild.querySelector('#'+imageId+'_container') ;
-			const styles = parseStyles( svgobj.querySelector( 'style' ) );
-			const elements = svgobj.querySelectorAll( '[class]' );
+    svgobj = el[0].firstChild.querySelector('#'+imageId+'_container') ;
+    const styles = parseStyles( svgobj.querySelector( 'style' ) );
+    const elements = svgobj.querySelectorAll( '[class]' );
 
 // console.log(styles);
-			for ( let j = 0; j < elements.length; j += 1 ) {
-				applyStyles( elements[ j ], styles );
-			}
+    for ( let j = 0; j < elements.length; j += 1 ) {
+      applyStyles( elements[ j ], styles );
+    }
 
 // R SVGs
-			for (var sty in styles) {
-				if (sty == "circle" || sty == "line" || sty == "path" || sty == "polygon" || sty == "polyline" || sty == "rect") {
-					shapes = svgobj.querySelectorAll(sty);	
-					for (var j=0; j< shapes.length; j++) {
-						Object.keys(styles[sty]).forEach( prop => {
+    for (var sty in styles) {
+      if (sty == "circle" || sty == "line" || sty == "path" || sty == "polygon" || sty == "polyline" || sty == "rect") {
+        shapes = svgobj.querySelectorAll(sty);  
+        for (var j=0; j< shapes.length; j++) {
+          Object.keys(styles[sty]).forEach( prop => {
 // console.log(prop+"=>"+shapes[j].style[prop]);
-							if (!shapes[j].style[prop]) {
-								shapes[j].style[prop] = styles[sty][prop];
-							}
-						} );
-					}
-				}
-		    }
+            if (!shapes[j].style[prop]) {
+              shapes[j].style[prop] = styles[sty][prop];
+            }
+          });
+        }
+      }
+    }
 
 // remove global style definition as they are shared among SVGs
-			$('#'+imageId).find("style").remove();
+    $('#'+imageId).find("style").remove();
 
 // console.log(svgobj);
-			
-			el.attr('data-custom-id', imageId);
+    
+    el.attr('data-custom-id', imageId);
 
-			el.draggable({ handle: "#dragHandle" });
+    el.draggable({ handle: "#dragHandle" });
 
-			return false;
-		}.bind(this);
-
-
-		$('#add-new-Text').click( function() {
-			addNewWidget("text-box");
-		});
+    return false;
+  }.bind(this);
 
 
-		$('#add-new-Control').click( function () {
-			for (var i=1; i<num; i++) {
-				var myImg = "plot"+i;
-				var myContainer = myImg + "_container";
+  $('#add-new-Text').click( function() {
+    addNewWidget("text-box");
+  });
+
+
+  $('#add-new-Control').click( function () {
+    for (var i=1; i<num; i++) {
+      var myImg = "plot"+i;
+      var myContainer = myImg + "_container";
 console.log(myImg);
 console.log(document.getElementById(myImg));
-				if (document.getElementById(myImg) == null || document.getElementById(myContainer).classList.contains("text-box")) {
-					continue;
-				}
+      if (document.getElementById(myImg) == null || document.getElementById(myContainer).classList.contains("text-box")) {
+        continue;
+      }
 
-				if (document.getElementById(myImg).getElementById("svg-pan-zoom-controls") !== null) {
-					continue;
-				}
-
-
-				svgPanZoom('#'+myImg, {
-					zoomEnabled:true,
-					maxZoom:100,
-					minZoom:0.1,
-					zoomScaleSensitivity:0.1,
-					fit:true,
-					center:true,
-					controlIconsEnabled:true
-				});
-			}
-		});
-
-		$('#save-HTML').click( function () {
-			var locsize = new Object();
-			locsize["num"] = num-1;
-
-	        _.map($('.grid-stack .grid-stack-item:visible'), function (el) {
-	            el       = $(el);
-
-// console.log(el[0]);
-
-	            var node = el.data('_gridstack_node');
-				var myid = el.attr('data-custom-id');
-				var panZoom = svgPanZoom('#'+myid);
-
-				locsize[el.attr('data-custom-id')] = 
-	            {
-	                // save additional stuff here, but no pointers or circular stuff!
-	                // You need to save every data that is needed to recreate the node
-	                // If you get the data from the server, it might be only the id
-	                // Sidenode: you also should save the min and max height/widht
-	                id    : el.attr('data-custom-id'),
-					title : $('#'+el.attr('data-custom-id')+'_title').html(),
-					zoom  : panZoom.getZoom(),
-					pan	  : panZoom.getPan(),
-	                x     : node.x,
-	                y     : node.y,
-	                width : node.width,
-	                height: node.height,
-					left: el[0].style['left'],
-					top: el[0].style['top'],
-					divwidth: el[0].style['width'],
-					divheight: el[0].style['height'],
-					zindex: el[0].style['z-index']
-	            };
-	        });
+      if (document.getElementById(myImg).getElementById("svg-pan-zoom-controls") !== null) {
+        continue;
+      }
 
 
-			var text = '<html>\n<head>\n'+$("head").html()+'<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/dropzone.css">\n</head>\n<body>\n';
-			text += $("#block3").html();
-//			text += '<div id=locsize style="display:none;">' + JSON.stringify(locsize) + '</div>';
+      svgPanZoom('#'+myImg, {
+        zoomEnabled:true,
+        maxZoom:100,
+        minZoom:0.1,
+        zoomScaleSensitivity:0.1,
+        fit:true,
+        center:true,
+        controlIconsEnabled:true
+      });
+    }
+  });
 
-			for (var i=1; i<num; i++) {
-				var myImg = "plot"+i;
-				if (document.getElementById(myImg) == null) {
-					continue;
-				}
+  $('#save-HTML').click( function () {
+    var locsize = new Object();
+    locsize["num"] = num-1;
 
-				text += '<div id="'+myImg+'_saved" style="display:none;">';
+    _.map($('.grid-stack .grid-stack-item:visible'), function (el) {
+      el = $(el);
 
-				var svg = $('#'+myImg+'_container').html();
-				svg = svg.replace(/<g +id=\"svg-pan-zoom-controls\".+/, '<\/svg>');
-//				svg = svg.replace(/<g[^>]+svg-pan-zoom_viewport[^>]+>/, '');
-				text += svg;
-				text += '</div>';
-			}
+      var node = el.data('_gridstack_node');
+      var myid = el.attr('data-custom-id');
+      var panZoom = svgPanZoom('#'+myid);
+    
+      locsize[el.attr('data-custom-id')] = {
+        // save additional stuff here, but no pointers or circular stuff!
+        // You need to save every data that is needed to recreate the node
+        // If you get the data from the server, it might be only the id
+        // Sidenode: you also should save the min and max height/widht
+        id    : el.attr('data-custom-id'),
+        title : $('#'+el.attr('data-custom-id')+'_title').html(),
+        zoom  : panZoom.getZoom(),
+        pan   : panZoom.getPan(),
+        x     : node.x,
+        y     : node.y,
+        width : node.width,
+        height: node.height,
+        left: el[0].style['left'],
+        top: el[0].style['top'],
+        divwidth: el[0].style['width'],
+        divheight: el[0].style['height'],
+        zindex: el[0].style['z-index']
+      };
+    });
 
-			text += '<script type="text/javascript">\n\$(function () {\n\tvar locsize='+JSON.stringify(locsize)+';';
-			text = text + $("#block2").html();
-			text = text.replace(/<!--/g,'').replace(/-->/g,'');
+    var text = '<html>\n<head>\n'+$("head").html()+'<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/dropzone.css">\n</head>\n<body>\n';
+    text += $("#block3").html();
+    text += '<div id=locsize style="display:none;">' + JSON.stringify(locsize) + '</div>';
 
-			var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
-			saveAs(blob, "Myplot.html");
-		});
+    for (var i=1; i<num; i++) {
+      var myImg = "plot"+i;
+      if (document.getElementById(myImg) == null) {
+        continue;
+      }
+
+      text += '<div id="'+myImg+'_saved" style="display:none;">';
+
+      var svg = $('#'+myImg+'_container').html();
+      svg = svg.replace(/<g +id=\"svg-pan-zoom-controls\".+/, '<\/svg>');
+//        svg = svg.replace(/<g[^>]+svg-pan-zoom_viewport[^>]+>/, '');
+      text += svg;
+      text += '</div>';
+    }
+
+    text += '<script type="text/javascript">\n\$(function () {\n\tvar locsize='+JSON.stringify(locsize)+';';
+    text = text + $("#block2").html();
+    text = text.replace(/<!--/g,'').replace(/-->/g,'');
+
+    var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "Myplot.html");
+  });
 </script>
 
 <div id="block3" style="display:none;">
 <!--
 <style type="text/css">
-	.grid-stack .grid-stack-item .grid-stack-item-content,
-	.grid-stack .grid-stack-item .placeholder-content {
-	    left: 0px;
-	    right: 0px;
-	    padding: 0px;
-		border: 0;
-	    overflow: hidden;
-	}
+  .grid-stack .grid-stack-item .grid-stack-item-content,
+  .grid-stack .grid-stack-item .placeholder-content {
+    left: 0px;
+    right: 0px;
+    padding: 0px;
+    border: 0;
+    overflow: hidden;
+  }
 
-	
-	.grid-stack {
-	    background: white;
-		border: 0;
-	}
-	
-	.grid-stack-item-content {
-	    background: white;
-	    text-align: center;
-	}
-	
-	.svg-pan-zoom-control {display: none;}
-	.ui-draggable-handle {display: none;}
-	.no-print {display: none;}
+  
+  .grid-stack {
+    background: white;
+    border: 0;
+  }
+  
+  .grid-stack-item-content {
+    background: white;
+    text-align: center;
+  }
+  
+  .svg-pan-zoom-control {display: none;}
+  .ui-draggable-handle {display: none;}
+  .no-print {display: none;}
 </style>
 <div class="container" style="width:1152px;">
-	<a class="btn btn-default btn-sm" id="toggle-control">Show/Hide Control</a><p>
-	<div class="row"> <div class="grid-stack">
-	</div></div>
+  <a class="btn btn-default btn-sm" id="toggle-control">Show/Hide Control</a><p>
+  <div class="row"> <div class="grid-stack">
+  </div></div>
 </div>
 -->
 </div>
 
 <div id="block2" style="display:none;">
 <!--
-//	var locsize = JSON.parse($('#locsize').html());
+//  var locsize = JSON.parse($('#locsize').html());
 
-	$('#toggle-control').click( function () {
-		$(".svg-pan-zoom-control").toggle();
-		$(".ui-draggable-handle").toggle();
-	});
+  $('#toggle-control').click( function () {
+    $(".svg-pan-zoom-control").toggle();
+    $(".ui-draggable-handle").toggle();
+  });
 
-	var imageId;
+  var imageId;
 
-	var options = {
-		removable: '.trash',
-		removeTimeout: 100,
-		verticalMargin: 0,
-		cellHeight: 6,
-		resizable: { handles: 'se, sw' },
-//		always_show_resize_handle: true,
-		float: true
-	};
+  var options = {
+    removable: '.trash',
+    removeTimeout: 100,
+    verticalMargin: 0,
+    cellHeight: 6,
+    resizable: { handles: 'se, sw' },
+//    always_show_resize_handle: true,
+    float: true
+  };
 
-	$('.grid-stack').gridstack(options);
+  $('.grid-stack').gridstack(options);
 
-	this.grid = $('.grid-stack').data('gridstack');
-	this.grid.enableMove(false, false);
+  this.grid = $('.grid-stack').data('gridstack');
+  this.grid.enableMove(false, false);
 
 
-	this.addSVG = function ( svg, imageId ) {
-		var node = locsize[imageId];
+  this.addSVG = function ( svg, imageId ) {
+    var node = locsize[imageId];
 
-		var figureTitle = imageId+"_title";
-		var el = this.grid.addWidget($('<div style="z-index:'+node.zindex+'; width:'+node.divwidth+'; height:'+node.divheight+'; left:'+node.left+'; top:'+node.top+';"><div class="grid-stack-item-content col-xs-4"><div id='+figureTitle+' align="left" contenteditable="true"  onclick="this.focus\(\);">'+node.title+'</div><div id="'+imageId+'_container" style="width: 100%; height: 100%;">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height); 
+    var figureTitle = imageId+"_title";
+    var el = this.grid.addWidget($('<div style="z-index:'+node.zindex+'; width:'+node.divwidth+'; height:'+node.divheight+'; left:'+node.left+'; top:'+node.top+';"><div class="grid-stack-item-content col-xs-4"><div id='+figureTitle+' align="left" contenteditable="true"  onclick="this.focus\(\);">'+node.title+'</div><div id="'+imageId+'_container" style="width: 100%; height: 100%;">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height); 
 
-		el.draggable({ handle: "#dragHandle" });
+    el.draggable({ handle: "#dragHandle" });
 
-		return false;
-	}.bind(this);
+    return false;
+  }.bind(this);
 
-	var CTMs = [];
-	for (var i=1; i<=locsize['num']; i++) {
-		var myImg = "plot"+i;
-		if (document.getElementById(myImg) == null) {
-			continue;
-		}
-		CTMs[myImg] = $('#'+myImg)[0].querySelector('.svg-pan-zoom_viewport').getAttribute('transform');
-	}
+  var CTMs = [];
+  for (var i=1; i<=locsize['num']; i++) {
+    var myImg = "plot"+i;
+    if (document.getElementById(myImg) == null) {
+      continue;
+    }
+    CTMs[myImg] = $('#'+myImg)[0].querySelector('.svg-pan-zoom_viewport').getAttribute('transform');
+  }
 
-	for (var i=1; i<=locsize['num']; i++) {
-		var myImg = "plot"+i;
-		if (document.getElementById(myImg) == null) {
-			continue;
-		}
+  for (var i=1; i<=locsize['num']; i++) {
+    var myImg = "plot"+i;
+    if (document.getElementById(myImg) == null) {
+      continue;
+    }
 
-        document.getElementById(myImg).onload = function(e) {
-			myCTM = CTMs[e.target.id];
-			$('#'+e.target.id)[0].querySelector('.svg-pan-zoom_viewport').setAttribute('transform', myCTM);
-			$('#'+e.target.id)[0].querySelector('.svg-pan-zoom_viewport').style.transform = myCTM;
-			$('#'+e.target.id+'_saved').remove();
-        }
+    document.getElementById(myImg).onload = function(e) {
+      myCTM = CTMs[e.target.id];
+      $('#'+e.target.id)[0].querySelector('.svg-pan-zoom_viewport').setAttribute('transform', myCTM);
+      $('#'+e.target.id)[0].querySelector('.svg-pan-zoom_viewport').style.transform = myCTM;
+      $('#'+e.target.id+'_saved').remove();
+    }
 
-		this.addSVG ($('#'+myImg+'_saved').html(), myImg);
+    this.addSVG ($('#'+myImg+'_saved').html(), myImg);
 
-		var panZoom = svgPanZoom('#'+myImg, {
-                    zoomEnabled:true,
-					maxZoom:100,
-                    minZoom:0.1,
-                    zoomScaleSensitivity:0.1,
-                    fit:true,
-                    center:true,
-                    controlIconsEnabled:true
-                });
-
-//		panZoom.pan(locsize[myImg].pan);
-//		panZoom.zoom(locsize[myImg].zoom);
-
-	}
+    var panZoom = svgPanZoom('#'+myImg, {
+      zoomEnabled:true,
+      maxZoom:100,
+      minZoom:0.1,
+      zoomScaleSensitivity:0.1,
+      fit:true,
+      center:true,
+      controlIconsEnabled:true
+    });
+  }
 });
 </script>
 </body>
