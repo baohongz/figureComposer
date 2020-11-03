@@ -396,7 +396,7 @@ console.log('width='+wm+' height='+hm);
 // Remove white background to make it transparent
 
     if ($('#no-white-bg').prop('checked')) {
-console.log($('#no-white-bg').prop('checked'));
+console.log('no-white-bg:'+$('#no-white-bg').prop('checked'));
       svg = svg.replace(/<path fill=\"#FFF\"[^>]+d=\"[^>]*M[^>]+h[^>]+v[^>]+H[^>]+z\"\/>/g,"");
       svg = svg.replace(/<path fill=\"rgb\(255,255,255\)\"[^>]+d=\"[^>]*M[^>]+L[^>]+L[^>]+L[^>]+Z\"\/>/,"");
       svg = svg.replace(/<rect fill=\"rgb\(255,255,255\)\"[^>]+x=[^>]+\"\/>/,"");
@@ -442,7 +442,7 @@ console.log($('#no-white-bg').prop('checked'));
       }
     );
 
-
+/*
     svgobj = el[0].firstChild.querySelector('#'+imageId+'_container') ;
     const styles = parseStyles( svgobj.querySelector( 'style' ) );
     const elements = svgobj.querySelectorAll( '[class]' );
@@ -470,7 +470,8 @@ console.log($('#no-white-bg').prop('checked'));
 // remove global style definition as they are shared among SVGs
     $('#'+imageId).find("style").remove();
 
-// console.log(svgobj);
+ console.log(svgobj);
+*/
     
     el.attr('data-custom-id', imageId);
 
@@ -490,7 +491,6 @@ console.log($('#no-white-bg').prop('checked'));
       var myImg = "plot"+i;
       var myContainer = myImg + "_container";
 console.log(myImg);
-console.log(document.getElementById(myImg));
       if (document.getElementById(myImg) == null || document.getElementById(myContainer).classList.contains("text-box")) {
         continue;
       }
@@ -574,16 +574,10 @@ console.log(document.getElementById(myImg));
     border: 0;
     overflow: hidden;
   }
-
   
   .grid-stack {
     background: white;
     border: 0;
-  }
-  
-  .grid-stack-item-content {
-    background: white;
-    text-align: center;
   }
   
   .svg-pan-zoom-control {display: none;}
