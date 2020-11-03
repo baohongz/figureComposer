@@ -267,10 +267,13 @@
           img[0].height = 120;
         } else {
           var fileReader = new FileReader;
+          var myDropZone = this;
           fileReader.onload = function(event) {
             var doc = document.createElement('div');
             doc.innerHTML = event.target.result.replace(/^.*?<body>(.*?)<\/body>.*?$/s,"$1");
             console.log(doc);
+            var locsize = JSON.parse($('#locsize').html());
+            myDropZone.removeAllFiles();
             myFile = null;
           }
           fileReader.readAsText(file);
@@ -511,8 +514,6 @@ console.log(document.getElementById(myImg));
 
   $('#save-HTML').click( function () {
     var locsize = new Object();
-    locsize["num"] = num-1;
-
     _.map($('.grid-stack .grid-stack-item:visible'), function (el) {
       el = $(el);
 
@@ -545,22 +546,15 @@ console.log(document.getElementById(myImg));
     text += $("#block3").html();
     text += '<div id=locsize style="display:none;">' + JSON.stringify(locsize) + '</div>';
 
-    for (var i=1; i<num; i++) {
-      var myImg = "plot"+i;
-      if (document.getElementById(myImg) == null) {
-        continue;
-      }
-
+    Object.keys(locsize).forEach(function(myImg) {
       text += '<div id="'+myImg+'_saved" style="display:none;">';
-
       var svg = $('#'+myImg+'_container').html();
       svg = svg.replace(/<g +id=\"svg-pan-zoom-controls\".+/, '<\/svg>');
-//        svg = svg.replace(/<g[^>]+svg-pan-zoom_viewport[^>]+>/, '');
       text += svg;
       text += '</div>';
-    }
+    });
 
-    text += '<script type="text/javascript">\n\$(function () {\n\tvar locsize='+JSON.stringify(locsize)+';';
+    text += '<script type="text/javascript">\n\$(function () {\n  var locsize='+JSON.stringify(locsize)+';';
     text = text + $("#block2").html();
     text = text.replace(/<!--/g,'').replace(/-->/g,'');
 
@@ -606,14 +600,15 @@ console.log(document.getElementById(myImg));
 
 <div id="block2" style="display:none;">
 <!--
-//  var locsize = JSON.parse($('#locsize').html());
+  var CTMs = [];
+  Object.keys(locsize).forEach(function(myImg) {
+    CTMs[myImg] = $('#'+myImg)[0].querySelector('.svg-pan-zoom_viewport').getAttribute('transform');
+  });
 
   $('#toggle-control').click( function () {
     $(".svg-pan-zoom-control").toggle();
     $(".ui-draggable-handle").toggle();
   });
-
-  var imageId;
 
   var options = {
     removable: '.trash',
@@ -621,7 +616,6 @@ console.log(document.getElementById(myImg));
     verticalMargin: 0,
     cellHeight: 6,
     resizable: { handles: 'se, sw' },
-//    always_show_resize_handle: true,
     float: true
   };
 
@@ -630,52 +624,42 @@ console.log(document.getElementById(myImg));
   this.grid = $('.grid-stack').data('gridstack');
   this.grid.enableMove(false, false);
 
-
-  this.addSVG = function ( svg, imageId ) {
+  addSVG = function ( svg, imageId ) {
     var node = locsize[imageId];
-
     var figureTitle = imageId+"_title";
+
     var el = this.grid.addWidget($('<div style="z-index:'+node.zindex+'; width:'+node.divwidth+'; height:'+node.divheight+'; left:'+node.left+'; top:'+node.top+';"><div class="grid-stack-item-content col-xs-4"><div id='+figureTitle+' align="left" contenteditable="true"  onclick="this.focus\(\);">'+node.title+'</div><div id="'+imageId+'_container" style="width: 100%; height: 100%;">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height); 
 
     el.draggable({ handle: "#dragHandle" });
-
     return false;
   }.bind(this);
 
-  var CTMs = [];
-  for (var i=1; i<=locsize['num']; i++) {
-    var myImg = "plot"+i;
-    if (document.getElementById(myImg) == null) {
-      continue;
-    }
-    CTMs[myImg] = $('#'+myImg)[0].querySelector('.svg-pan-zoom_viewport').getAttribute('transform');
-  }
 
-  for (var i=1; i<=locsize['num']; i++) {
-    var myImg = "plot"+i;
-    if (document.getElementById(myImg) == null) {
-      continue;
-    }
-
+  Object.keys(locsize).forEach(function(myImg) {
     document.getElementById(myImg).onload = function(e) {
-      myCTM = CTMs[e.target.id];
-      $('#'+e.target.id)[0].querySelector('.svg-pan-zoom_viewport').setAttribute('transform', myCTM);
-      $('#'+e.target.id)[0].querySelector('.svg-pan-zoom_viewport').style.transform = myCTM;
+console.log(CTMs[e.target.id]);
+//      $('#'+e.target.id)[0].querySelector('.svg-pan-zoom_viewport').setAttribute('transform',CTMs[e.target.id]);
+//      $('#'+e.target.id)[0].querySelector('.svg-pan-zoom_viewport').style.transform = CTMs[e.target.id];
       $('#'+e.target.id+'_saved').remove();
+
+      var matrix = $('#'+e.target.id)[0].querySelector('.svg-pan-zoom_viewport').transform.baseVal.consolidate().matrix;
+      var panZoom = svgPanZoom('#'+e.target.id, {
+        zoomEnabled:true,
+  //      originalState: {zoom: matrix.a, x: matrix.e, y: matrix.f},
+        maxZoom:100,
+        minZoom:0.08,
+        zoomScaleSensitivity:0.05,
+        fit:false,
+        center:false,
+        controlIconsEnabled:true
+      });
+  console.log(panZoom);
+      panZoom.zoom(matrix.a);
+      panZoom.pan({x: matrix.e, y: matrix.f});
     }
 
-    this.addSVG ($('#'+myImg+'_saved').html(), myImg);
-
-    var panZoom = svgPanZoom('#'+myImg, {
-      zoomEnabled:true,
-      maxZoom:100,
-      minZoom:0.1,
-      zoomScaleSensitivity:0.1,
-      fit:true,
-      center:true,
-      controlIconsEnabled:true
-    });
-  }
+    addSVG ($('#'+myImg+'_saved').html(), myImg);
+  });
 });
 </script>
 </body>
