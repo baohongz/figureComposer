@@ -267,15 +267,32 @@
           img[0].height = 120;
         } else {
           var fileReader = new FileReader;
-          var myDropZone = this;
           fileReader.onload = function(event) {
             var doc = document.createElement('div');
             doc.innerHTML = event.target.result.replace(/^.*?<body>(.*?)<\/body>.*?$/s,"$1");
-            console.log(doc);
-            var locsize = JSON.parse($('#locsize').html());
-            myDropZone.removeAllFiles();
+            var locsize = JSON.parse(doc.querySelector("#locsize").innerHTML);
+            Object.keys(locsize).forEach(function(myImg) {
+              addSVG (doc.querySelector('#'+myImg+'_saved').innerHTML, myImg, locsize[myImg]);
+              if (locsize[myImg].type == "plot-box" && $('#'+myImg)[0].querySelector('.svg-pan-zoom_viewport') !== null) {
+                var matrix = $('#'+myImg)[0].querySelector('.svg-pan-zoom_viewport').transform.baseVal.consolidate().matrix;
+                var panZoom = svgPanZoom('#'+myImg, {
+                  zoomEnabled:true,
+                  maxZoom:100,
+                  minZoom:0.08,
+                  zoomScaleSensitivity:0.05,
+                  fit:false,
+                  center:false,
+                  controlIconsEnabled:true
+                });
+                panZoom.zoom(matrix.a);
+                panZoom.pan({x: matrix.e, y: matrix.f});
+              }
+            });
+            num += 1;
+            this.removeAllFiles();
             myFile = null;
-          }
+          }.bind(this); // bind Dropzone to the listener
+
           fileReader.readAsText(file);
         }
       });
@@ -289,6 +306,37 @@
       });
     }
   }
+
+  addSVG = function ( svg, imageId, node ) {
+    var figureTitle = imageId+"_title";
+
+    var el = this.grid.addWidget($('<div class=image_div id='+imageId+'z style="z-index:'+node.zindex+'; width:'+node.divwidth+'; height:'+node.divheight+'; left:'+node.left+'; top:'+node.top+';"><div class="grid-stack-item-content col-xs-4"><div class="tinymce-body" id='+figureTitle+' align="left"  onclick="initEditor\('+figureTitle+'\);this.focus\(\);">'+node.title+'</div><div id="'+imageId+'_container" class='+node.type+' style="width: 100%; height: 100%; ">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height);
+
+    $('#list-1').append('<div id='+imageId+'z_hdl class="dragzidx">'+imageId+'z</div>');
+
+    $('#'+imageId+'z_hdl').hover(
+      function () {
+// Baohong: textContent is the text in <div> tag
+        div_id = this.textContent;
+        $('#'+div_id).css("background-color", 'lightgoldenrodyellow');
+        $('#'+div_id+'_hdl').css("background-color", 'lightgoldenrodyellow');
+        $('#'+div_id+'_hdl').css("color", 'black');
+      },
+      function () {
+        div_id = this.textContent;
+        $('#'+div_id).css("background-color", 'transparent');
+        $('#'+div_id+'_hdl').css("background-color", 'rgb(0, 135, 247)');
+        $('#'+div_id+'_hdl').css("color", 'white');
+      }
+    );
+
+    el.attr('data-custom-id', imageId);
+    el.draggable({ handle: "#dragHandle" });
+    if (num < parseInt(imageId.replace("plot",""))) {
+      num = parseInt(imageId.replace("plot",""));
+    }
+    return false;
+  }.bind(this);
 
   var options = {
     removable: '.trash',
@@ -423,7 +471,6 @@ console.log('no-white-bg:'+$('#no-white-bg').prop('checked'));
     var initZindex = num+60; 
     var el = this.grid.addWidget($('<div class=image_div id='+imageId+'z style="z-index:'+initZindex+';"><div class="grid-stack-item-content col-xs-4"><div class="tinymce-body" id='+figureTitle+' align="left"  onclick="initEditor\('+figureTitle+'\);this.focus\(\);">'+textHint+'</div><div id="'+imageId+'_container" class='+myType+' style="width: 100%; height: 100%; ">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height);
 
-    num += 1;
     $('#list-1').append('<div id='+imageId+'z_hdl class="dragzidx">'+imageId+'z</div>');
 
     $('#'+imageId+'z_hdl').hover(
@@ -441,8 +488,8 @@ console.log('no-white-bg:'+$('#no-white-bg').prop('checked'));
         $('#'+div_id+'_hdl').css("color", 'white');
       }
     );
+    num += 1;
 
-/*
     svgobj = el[0].firstChild.querySelector('#'+imageId+'_container') ;
     const styles = parseStyles( svgobj.querySelector( 'style' ) );
     const elements = svgobj.querySelectorAll( '[class]' );
@@ -470,11 +517,7 @@ console.log('no-white-bg:'+$('#no-white-bg').prop('checked'));
 // remove global style definition as they are shared among SVGs
     $('#'+imageId).find("style").remove();
 
- console.log(svgobj);
-*/
-    
     el.attr('data-custom-id', imageId);
-
     el.draggable({ handle: "#dragHandle" });
 
     return false;
@@ -499,7 +542,6 @@ console.log(myImg);
         continue;
       }
 
-
       svgPanZoom('#'+myImg, {
         zoomEnabled:true,
         maxZoom:100,
@@ -519,7 +561,12 @@ console.log(myImg);
 
       var node = el.data('_gridstack_node');
       var myid = el.attr('data-custom-id');
-      var panZoom = svgPanZoom('#'+myid);
+	  var zm=1, panx=0, pany=0;
+console.log(myid);
+      if ($('#'+myid)[0].querySelector('.svg-pan-zoom_viewport') !== null) {
+        var matrix = $('#'+myid)[0].querySelector('.svg-pan-zoom_viewport').transform.baseVal.consolidate().matrix;
+        zm = matrix.a, panx = matrix.e, pany = matrix.f;
+      }
     
       locsize[el.attr('data-custom-id')] = {
         // save additional stuff here, but no pointers or circular stuff!
@@ -528,8 +575,9 @@ console.log(myImg);
         // Sidenode: you also should save the min and max height/widht
         id    : el.attr('data-custom-id'),
         title : $('#'+el.attr('data-custom-id')+'_title').html(),
-        zoom  : panZoom.getZoom(),
-        pan   : panZoom.getPan(),
+        type  : $('#'+el.attr('data-custom-id')+'_container')[0].className,
+        zoom  : zm,
+        pan   : {x: panx, y: pany},
         x     : node.x,
         y     : node.y,
         width : node.width,
@@ -594,11 +642,6 @@ console.log(myImg);
 
 <div id="block2" style="display:none;">
 <!--
-  var CTMs = [];
-  Object.keys(locsize).forEach(function(myImg) {
-    CTMs[myImg] = $('#'+myImg)[0].querySelector('.svg-pan-zoom_viewport').getAttribute('transform');
-  });
-
   $('#toggle-control').click( function () {
     $(".svg-pan-zoom-control").toggle();
     $(".ui-draggable-handle").toggle();
@@ -628,31 +671,34 @@ console.log(myImg);
     return false;
   }.bind(this);
 
+/* old way. using panZoom now.
+  var CTMs = [];
+  Object.keys(locsize).forEach(function(myImg) {
+    CTMs[myImg] = $('#'+myImg)[0].querySelector('.svg-pan-zoom_viewport').getAttribute('transform');
+  });
+*/
+
 
   Object.keys(locsize).forEach(function(myImg) {
+/*
     document.getElementById(myImg).onload = function(e) {
-console.log(CTMs[e.target.id]);
-//      $('#'+e.target.id)[0].querySelector('.svg-pan-zoom_viewport').setAttribute('transform',CTMs[e.target.id]);
-//      $('#'+e.target.id)[0].querySelector('.svg-pan-zoom_viewport').style.transform = CTMs[e.target.id];
-      $('#'+e.target.id+'_saved').remove();
-
-      var matrix = $('#'+e.target.id)[0].querySelector('.svg-pan-zoom_viewport').transform.baseVal.consolidate().matrix;
-      var panZoom = svgPanZoom('#'+e.target.id, {
-        zoomEnabled:true,
-  //      originalState: {zoom: matrix.a, x: matrix.e, y: matrix.f},
-        maxZoom:100,
-        minZoom:0.08,
-        zoomScaleSensitivity:0.05,
-        fit:false,
-        center:false,
-        controlIconsEnabled:true
-      });
-  console.log(panZoom);
-      panZoom.zoom(matrix.a);
-      panZoom.pan({x: matrix.e, y: matrix.f});
+      $('#'+e.target.id)[0].querySelector('.svg-pan-zoom_viewport').setAttribute('transform',CTMs[e.target.id]);
+      $('#'+e.target.id)[0].querySelector('.svg-pan-zoom_viewport').style.transform = CTMs[e.target.id];
     }
-
+*/
     addSVG ($('#'+myImg+'_saved').html(), myImg);
+    $('#'+myImg+'_saved').remove();
+    var panZoom = svgPanZoom('#'+myImg, {
+      zoomEnabled:true,
+      maxZoom:100,
+      minZoom:0.08,
+      zoomScaleSensitivity:0.05,
+      fit:false,
+      center:false,
+      controlIconsEnabled:true
+    });
+    panZoom.zoom(locsize[myImg].zoom);
+    panZoom.pan(locsize[myImg].pan);
   });
 });
 </script>
