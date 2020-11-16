@@ -533,7 +533,6 @@ console.log('no-white-bg:'+$('#no-white-bg').prop('checked'));
     for (var i=1; i<num; i++) {
       var myImg = "plot"+i;
       var myContainer = myImg + "_container";
-console.log(myImg);
       if (document.getElementById(myImg) == null || document.getElementById(myContainer).classList.contains("text-box")) {
         continue;
       }
@@ -562,7 +561,6 @@ console.log(myImg);
       var node = el.data('_gridstack_node');
       var myid = el.attr('data-custom-id');
 	  var zm=1, panx=0, pany=0;
-console.log(myid);
       if ($('#'+myid)[0].querySelector('.svg-pan-zoom_viewport') !== null) {
         var matrix = $('#'+myid)[0].querySelector('.svg-pan-zoom_viewport').transform.baseVal.consolidate().matrix;
         zm = matrix.a, panx = matrix.e, pany = matrix.f;
