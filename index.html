@@ -127,6 +127,9 @@
         '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
       ]
     };
+    let drag = false; 
+    document.addEventListener( 'mousedown', () => drag = false); 
+    document.addEventListener( 'mousemove', () => drag = true); 
   </script>
 </head>
 
@@ -167,10 +170,6 @@
   var num = 1;
   var imageId;
   var div_id;
-  let drag = false; 
-  document.addEventListener( 'mousedown', () => drag = false); 
-  document.addEventListener( 'mousemove', () => drag = true); 
-
 
   $("#list-1").sortable({
     start: function( event, ui ) {

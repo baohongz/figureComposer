@@ -246,8 +246,8 @@
 	color: #333333;
 }
 .ui-widget-header {
-	border: 0px solid #e78f08;
-	background: white;
+	border: 0px;
+	background: #efefef;
 	color: #ffffff;
 	font-weight: bold;
 }
