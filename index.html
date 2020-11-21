@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/gridstack.css"/>
   <link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/trash.css"/>
   <link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/dropzone.css">
+  <link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/jquery-ui.css">
 
   <script src="https://baohongz.github.io/figureComposer/dist/jquery.min.js"></script>
   <script src="https://baohongz.github.io/figureComposer/dist/jquery-ui.min.js"></script>
@@ -27,7 +28,7 @@
       background: white;
       border-radius: 5px;
       padding: 10px 10px;
-      border: 2px dashed rgb(0, 135, 247);
+      border: 2px dashed #0087F7;
       border-image: none;
       width: 100%;
       height: 100%;
@@ -37,7 +38,7 @@
     .dropzone .dz-message {
       margin: 1em 0;
     }
-    .dragzidx {cursor: move;margin:2px;padding:2px;background:rgb(0, 135, 247);color:white;border-radius: 2px; width:55px; height:22px;}
+    .dragzidx {cursor: move;margin:2px;padding:2px;background:#0087F7;color:white;border-radius: 2px; width:55px; height:22px;}
 
     .trash {
       height: 200px;
@@ -60,7 +61,7 @@
     .grid-stack {
       background: lightgoldenrodyellow;
       background: white;
-      border: 1px solid rgb(0, 135, 247);
+      border: 1px solid #0087F7;
     }
 
     .grid-stack-item-content {
@@ -90,8 +91,19 @@
       margin-top: 0px;
       margin-bottom: 0px;
     }
+    .ui-dialog .ui-dialog-titlebar-close
+    {
+      background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAgMAAABinRfyAAAADFBMVEXf4ueZmZnu7u53d3fvpLkJAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfkCxUONjYdLkxuAAAAKklEQVQI12NgQAMHmBkYmD/wH2Bg+GMP5Nr/ARL8H2AEmAuSgCgBKUYFAN0FC/Wtg65fAAAAAElFTkSuQmCC');
+      z-index:999999;
+    }
   </style>
   <script type="text/javascript">
+    $(function() {
+      $("#dialog-2").dialog({
+        autoOpen: false,
+        width: 'auto'
+      });
+    });
     var editorConfig = {
       selector: '.tinymce-body',
       menubar: false,
@@ -155,6 +167,9 @@
   var num = 1;
   var imageId;
   var div_id;
+  let drag = false; 
+  document.addEventListener( 'mousedown', () => drag = false); 
+  document.addEventListener( 'mousemove', () => drag = true); 
 
 
   $("#list-1").sortable({
@@ -325,7 +340,7 @@
       function () {
         div_id = this.textContent;
         $('#'+div_id).css("background-color", 'transparent');
-        $('#'+div_id+'_hdl').css("background-color", 'rgb(0, 135, 247)');
+        $('#'+div_id+'_hdl').css("background-color", '#0087F7');
         $('#'+div_id+'_hdl').css("color", 'white');
       }
     );
@@ -484,7 +499,7 @@ console.log(myType);
       function () {
         div_id = this.textContent;
         $('#'+div_id).css("background-color", 'transparent');
-        $('#'+div_id+'_hdl').css("background-color", 'rgb(0, 135, 247)');
+        $('#'+div_id+'_hdl').css("background-color", '#0087F7');
         $('#'+div_id+'_hdl').css("color", 'white');
       }
     );
@@ -519,10 +534,24 @@ console.log(myType);
 
     el.attr('data-custom-id', imageId);
     el.draggable({ handle: "#dragHandle" });
-
+  
+    $(".plot-box").click (function () {
+      if (drag) return;
+      var myImg = this.id.replace('_container','');
+      $("#dialog-2").html(this.innerHTML.replace(myImg,myImg+'_popup')); 
+      $("#dialog-2").dialog("open");
+      svgPanZoom('#'+myImg+'_popup', {
+        zoomEnabled:true,
+        maxZoom:100,
+        minZoom:0.1,
+        zoomScaleSensitivity:0.1,
+        fit:true,
+        center:true,
+        controlIconsEnabled:true
+      });
+    });
     return false;
   }.bind(this);
-
 
   $('#add-new-Text').click( function() {
     addNewWidget("text-box");
@@ -704,5 +733,6 @@ console.log(myType);
 </html>
 -->
 </div>
+<div id = "dialog-2"></div>
 </body>
 </html>
