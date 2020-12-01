@@ -91,6 +91,7 @@
       margin-top: 0px;
       margin-bottom: 0px;
     }
+    .ui-dialog .ui-dialog-titlebar { background: #EFEFEF; }
     .ui-dialog .ui-dialog-titlebar-close
     {
       background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAgMAAABinRfyAAAADFBMVEXf4ueZmZnu7u53d3fvpLkJAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfkCxUONjYdLkxuAAAAKklEQVQI12NgQAMHmBkYmD/wH2Bg+GMP5Nr/ARL8H2AEmAuSgCgBKUYFAN0FC/Wtg65fAAAAAElFTkSuQmCC');
@@ -139,7 +140,7 @@
     <div align=center>
       <a class="btn btn-default" id="add-new-Text">Add Text Box</a>
       <a class="btn btn-default" id="add-new-Control">Add Control</a>
-      <a class="btn btn-default" id="save-HTML">Save as HTML</a>
+      <a class="btn btn-default" id="save-HTML">Save as HTML/session</a>
       <a class="btn btn-default" href=figure/Fig1.html target=_blank>Demo1</a>
       <a class="btn btn-default" href=figure/Fig.s5.html target=_blank>Demo2</a>
       <a class="btn btn-default" href=violin.html target=_blank>Violin Plot</a>
@@ -152,7 +153,7 @@
     <div id="list-1" style="width:80px;height:200px;overflow:auto;border:1px dashed red;float:left;"></div>
     <div align=center class="col-xs-4" style="height:200px">
       <FORM class="dropzone needsclick" id="dropzoneUpload" action="/">
-      <div class="dz-message needsclick">Drop a SVG (high resolution), JPEG, GIF or PNG file here or click here to upload. Click "Add Text Box" to add a text input box to the canvas. Click and select text to format. Note: use open-source tool <b>Inkscape</b> (https://inkscape.org) to convert other formats to one of the acceptable formats, preferably SVG.</div>
+      <div class="dz-message needsclick">Drop a SVG (high resolution), JPEG, GIF, PNG or HTML session file here or click anywhere in the box to upload. Click "Add Text Box" to add a text input box to the canvas. Click and select text to format. Note: use open-source tool <b>Inkscape</b> (https://inkscape.org) to convert other formats to one of the acceptable formats, preferably SVG.</div>
       </FORM>
     </div>
     <div align=center class="col-xs-4">
@@ -399,7 +400,6 @@
 
   this.addNewWidget = function (myType) {
     var svg = null;
-console.log(myType);
     if (myType == "plot-box") {
       var images = myFile.previewElement.querySelectorAll("[data-dz-thumbnail]");
       if (images[0].src.match(/^data:image\/svg/)) {
@@ -433,41 +433,33 @@ console.log(myType);
       }
     }
 
-    svg = svg.replace(/.*?<svg[^>]+>/i, '<svg xmlns="http://www.w3.org/2000/svg" id="'+imageId+'" style="display: inline; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; " width="'+wm+'" height="'+hm+'" viewBox="0 0 '+wm+' '+hm+'" version="1.1">');
+    var svgclass="";
+    svg.match(/(<svg[^>]+>)/);
+    RegExp.$1.match(/(class\s*=\s*[^\s]+)/i);
+    svgclass = RegExp.$1;
 
-    svg = svg.replace(/<g +id=\"svg-pan-zoom-controls\".+/, '<\/svg>').replace(/<g[^>]+svg-pan-zoom_viewport[^>]+>/, '');
-
-
-// Avoid components with same names from different SVG files (old)
-/*
-    svg = svg.replace(/glyph(\d+)-(\d+)/ig, 'glyph-'+num+'-$1-$2');
-    svg = svg.replace(/clipPath id=\"clip(\d+)\"/ig, 'clipPath id=\"clip-'+num+'-$1\"');
-    svg = svg.replace(/clip-path=\"url\(#clip(\d+)\)\"/ig, 'clip-path=\"url\(#clip-'+num+'-$1\)\"');
-    svg = svg.replace(/id=\"path(\d+)\"/ig, 'id=\"path-'+num+'-$1\"');
-// MS PPT exports
-    svg = svg.replace(/=\"(#?)img(\d+)\"/ig, '=\"$1-img-'+num+'-$2\"');
-*/
+    svg = svg.replace(/.*?<svg[^>]+>/i, '<svg xmlns="http://www.w3.org/2000/svg" id="'+imageId+'" style="display: inline; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; " width="'+wm+'" height="'+hm+'" viewBox="0 0 '+wm+' '+hm+'" '+svgclass+' version="1.1">');
 
 // Avoid components with same names from different SVG files (use SVGInsert, svg-inject.js)
     svgElem = buildSvgElement(svg, false);
+    if (svgElem.getElementById("svg-pan-zoom-controls") !== null) svgElem.getElementById("svg-pan-zoom-controls").remove();
     makeIdsUnique(svgElem, false);
     svg = svgElemToSvgString(svgElem);
-// console.log(svg)
 
-// Remove white background to make it transparent
-
+// Remove white background to make a plot transparent. It is based on how tools (R, Inkscape, cavasXpress, WikiPathways, Reactome or highcharts) handle background color.
     if ($('#no-white-bg').prop('checked')) {
       console.log('no-white-bg:'+$('#no-white-bg').prop('checked'));
-      svg = svg.replace(/<path fill=\"#FFF\"[^>]+d=\"[^>]*M[^>]+h[^>]+v[^>]+H[^>]+z\"\/>/g,"");
-      svg = svg.replace(/<path fill=\"rgb\(255,255,255\)\"[^>]+d=\"[^>]*M[^>]+L[^>]+L[^>]+L[^>]+Z\"\/>/,"");
-      svg = svg.replace(/<rect fill=\"rgb\(255,255,255\)\"[^>]+x=[^>]+\"\/>/,"");
-      svg = svg.replace(/<rect x=\"0\" y=\"0\"[^>]+style=\"fill:rgb\(100\%,100\%,100\%\);fill-opacity:1;[^>]+\"\/>/g,"");
-      svg = svg.replace(/fill: *rgb\(100\%, *100\%, *100\%\); *fill-opacity: *1;/g,"fill:rgb\(100\%,100\%,100\%\);fill-opacity:0;");
-      svg = svg.replace(/fill: *rgb\(255, *255, *255\); *fill-opacity: *1;/g,"fill:rgb\(255,255,255);fill-opacity:0;");
-      svg = svg.replace(/<rect[^>]+stroke: none; fill: #FFFFFF;[^>]+\/>/g,"");
-      svg = svg.replace(/<rect[^>]+stroke: #FFFFFF; fill: #FFFFFF;[^>]+\/>/g,"");
-      svg = svg.replace(/<rect fill=\"#ffffff\" class=\"highcharts-background\"/i,"<rect fill=\"none\" class=\"highcharts-background\"");
-      svg = svg.replace(/background:\s+white;/g,"");
+      svg = svg.replace(/<path *fill=\"#FFF\"[^>]+d=\"[^>]*M[^>]+h[^>]+v[^>]+H[^>]+z\"\/>/g,"");
+      svg = svg.replace(/<path *fill=\"rgb\(255,255,255\)\"[^>]+d=\"[^>]*M[^>]+L[^>]+L[^>]+L[^>]+Z\"\/>/,"");
+      svg = svg.replace(/<rect *fill=\"rgb\(255,255,255\)\"[^>]+x=[^>]+\"\/>/,"");
+      svg = svg.replace(/<rect *x=\"0\" y=\"0\"[^>]+style=\"fill:rgb\(100\%,100\%,100\%\);fill-opacity:1;[^>]+\"\/>/g,"");
+      svg = svg.replace(/fill:\s+rgb\(100\%,\s+100\%,\s+100\%\);\s+fill-opacity:\s+1;/gi,"fill:rgb\(100\%,100\%,100\%\);fill-opacity:0;");
+      svg = svg.replace(/fill:\s+rgb\(255,\s+255,\s+255\);\s+fill-opacity:\s+1;/gi,"fill:rgb\(255,255,255);fill-opacity:0;");
+      svg = svg.replace(/<rect[^>]+stroke:\s+none;\s+fill:\s+#FFFFFF;[^>]+\/>/gi,""); // R
+      svg = svg.replace(/<rect[^>]+stroke:\s+#FFFFFF;\s+fill:\s+#FFFFFF;[^>]+\/>/gi,""); // R
+      svg = svg.replace(/<rect fill=\"#ffffff\" class=\"highcharts-background\"/i,"<rect fill=\"none\" class=\"highcharts-background\""); // highcharts.js
+      svg = svg.replace(/background:\s+white;/g,""); // WikiPathways
+      svg = svg.replace(/<rect\s+id=\"BG[^>]+\/>/gi,""); // Reactome
     }
 
     var node = this.items.pop();
@@ -508,11 +500,6 @@ console.log(myType);
     const styles = parseStyles( svgobj.querySelector( 'style' ) );
     const elements = svgobj.querySelectorAll( '[class]' );
 
-// console.log(styles);
-    for ( let j = 0; j < elements.length; j += 1 ) {
-      applyStyles( elements[ j ], styles );
-    }
-
 // R SVGs
     for (var sty in styles) {
       if (sty == "circle" || sty == "line" || sty == "path" || sty == "polygon" || sty == "polyline" || sty == "rect") {
@@ -528,8 +515,14 @@ console.log(myType);
       }
     }
 
-// remove global style definition as they are shared among SVGs
-    $('#'+imageId).find("style").remove();
+// remove global style definition as they are shared among SVGs unless it is defined as SVG class
+    if (svgclass.length < 1) {
+      for ( let j = 0; j < elements.length; j += 1 ) {
+        applyStyles( elements[ j ], styles );
+      }
+      $('#'+imageId).find("style").remove();
+    }
+
 
     el.attr('data-custom-id', imageId);
     el.draggable({ handle: "#dragHandle" });
@@ -622,8 +615,8 @@ console.log(myType);
 
     Object.keys(locsize).forEach(function(myImg) {
       text += '<div id="'+myImg+'_saved" style="display:none;">';
+      $('#'+myImg+' #svg-pan-zoom-controls').remove();
       var svg = $('#'+myImg+'_container').html();
-      svg = svg.replace(/<g +id=\"svg-pan-zoom-controls\".+/, '<\/svg>');
       text += svg;
       text += '</div>';
     });
@@ -653,9 +646,8 @@ console.log(myType);
     background: white;
     border: 0;
   }
-  
-  .svg-pan-zoom-control {display: none;}
-  .ui-draggable-handle {display: none;}
+  .container .svg-pan-zoom-control {display: none;}
+  .container .ui-draggable-handle {display: none;}
   .no-print {display: none;}
 </style>
 <div class="container" style="width:1152px;">
@@ -669,8 +661,8 @@ console.log(myType);
 <div id="block2" style="display:none;">
 <!--
   $('#toggle-control').click( function () {
-    $(".svg-pan-zoom-control").toggle();
-    $(".ui-draggable-handle").toggle();
+    $(".container .svg-pan-zoom-control").toggle();
+    $(".container .ui-draggable-handle").toggle();
   });
 
   var options = {
@@ -691,9 +683,25 @@ console.log(myType);
     var node = locsize[imageId];
     var figureTitle = imageId+"_title";
 
-    var el = this.grid.addWidget($('<div style="z-index:'+node.zindex+'; width:'+node.divwidth+'; height:'+node.divheight+'; left:'+node.left+'; top:'+node.top+';"><div class="grid-stack-item-content col-xs-4"><div id='+figureTitle+' align="left" contenteditable="true"  onclick="this.focus\(\);">'+node.title+'</div><div id="'+imageId+'_container" style="width: 100%; height: 100%;">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height); 
+    var el = this.grid.addWidget($('<div style="z-index:'+node.zindex+'; width:'+node.divwidth+'; height:'+node.divheight+'; left:'+node.left+'; top:'+node.top+';"><div class="grid-stack-item-content col-xs-4"><div id='+figureTitle+' align="left" contenteditable="true"  onclick="this.focus\(\);">'+node.title+'</div><div id="'+imageId+'_container" class="'+node.type+'" style="width: 100%; height: 100%;">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height); 
 
     el.draggable({ handle: "#dragHandle" });
+    $(".plot-box").click (function () {
+      if (drag) return;
+      var myImg = this.id.replace('_container','');
+      $("#dialog-2").html(this.innerHTML.replace(myImg,myImg+'_popup'));
+      $("#dialog-2 #svg-pan-zoom-controls").remove();
+      $("#dialog-2").dialog("open");
+      svgPanZoom('#'+myImg+'_popup', {
+        zoomEnabled:true,
+        maxZoom:100,
+        minZoom:0.1,
+        zoomScaleSensitivity:0.1,
+        fit:true,
+        center:true,
+        controlIconsEnabled:true
+      });
+    });
     return false;
   }.bind(this);
 
@@ -728,10 +736,11 @@ console.log(myType);
   });
 });
 </script>
+<div id="dialog-2"></div>
 </body>
 </html>
 -->
 </div>
-<div id = "dialog-2"></div>
+<div id="dialog-2"></div>
 </body>
 </html>
