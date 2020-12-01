@@ -434,9 +434,9 @@
     }
 
     var svgclass="";
-    svg.match(/(<svg[^>]+>)/);
-    RegExp.$1.match(/(class\s*=\s*[^\s]+)/i);
-    svgclass = RegExp.$1;
+    if (svg.match(/<svg[^>]+(class\s*=\s*[^\s]+)[^>]+>/)) svgclass = RegExp.$1;
+
+console.log(svgclass.length);
 
     svg = svg.replace(/.*?<svg[^>]+>/i, '<svg xmlns="http://www.w3.org/2000/svg" id="'+imageId+'" style="display: inline; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; " width="'+wm+'" height="'+hm+'" viewBox="0 0 '+wm+' '+hm+'" '+svgclass+' version="1.1">');
 
@@ -527,8 +527,8 @@
     el.attr('data-custom-id', imageId);
     el.draggable({ handle: "#dragHandle" });
   
-    $(".plot-box").click (function () {
-      if (drag) return;
+    $(".plot-box").click (function (e) {
+      if (drag || e.originalEvent.path[2].classList.contains("svg-pan-zoom-control")) return;
       var myImg = this.id.replace('_container','');
       $("#dialog-2").html(this.innerHTML.replace(myImg,myImg+'_popup')); 
       $("#dialog-2").dialog("open");
@@ -615,8 +615,9 @@
 
     Object.keys(locsize).forEach(function(myImg) {
       text += '<div id="'+myImg+'_saved" style="display:none;">';
-      $('#'+myImg+' #svg-pan-zoom-controls').remove();
-      var svg = $('#'+myImg+'_container').html();
+      var $temp = $("<div></div>");
+      $temp.append($('#'+myImg+'_container').html()).find("#svg-pan-zoom-controls").remove();
+      var svg = $temp.html();
       text += svg;
       text += '</div>';
     });
@@ -686,8 +687,8 @@
     var el = this.grid.addWidget($('<div style="z-index:'+node.zindex+'; width:'+node.divwidth+'; height:'+node.divheight+'; left:'+node.left+'; top:'+node.top+';"><div class="grid-stack-item-content col-xs-4"><div id='+figureTitle+' align="left" contenteditable="true"  onclick="this.focus\(\);">'+node.title+'</div><div id="'+imageId+'_container" class="'+node.type+'" style="width: 100%; height: 100%;">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height); 
 
     el.draggable({ handle: "#dragHandle" });
-    $(".plot-box").click (function () {
-      if (drag) return;
+    $(".plot-box").click (function (e) {
+      if (drag || e.originalEvent.path[2].classList.contains("svg-pan-zoom-control")) return;
       var myImg = this.id.replace('_container','');
       $("#dialog-2").html(this.innerHTML.replace(myImg,myImg+'_popup'));
       $("#dialog-2 #svg-pan-zoom-controls").remove();
