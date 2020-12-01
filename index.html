@@ -73,6 +73,7 @@
       .svg-pan-zoom-control {display: none;}
       .no-print {display: none;}
       #dragHandle {display: none;}
+      #toggle-control {display: none;}
       .grid-stack {background: none; border:none;}
       .grid-stack .grid-stack-item .grid-stack-item-content,
       .grid-stack .grid-stack-item .placeholder-content { border: none; }
@@ -285,7 +286,10 @@
           fileReader.onload = function(event) {
             var doc = document.createElement('div');
             doc.innerHTML = event.target.result.replace(/^.*?<body>(.*?)<\/body>.*?$/s,"$1");
-            var locsize = JSON.parse(doc.querySelector("#locsize").innerHTML);
+            var locsize=""; 
+            if (event.target.result.match(/locsize=({.*?}});/)) {
+              locsize = JSON.parse(RegExp.$1); 
+            }
             Object.keys(locsize).forEach(function(myImg) {
               addSVG (doc.querySelector('#'+myImg+'_saved').innerHTML, myImg, locsize[myImg]);
               if (locsize[myImg].type == "plot-box" && $('#'+myImg)[0].querySelector('.svg-pan-zoom_viewport') !== null) {
@@ -611,6 +615,8 @@ console.log(svgclass.length);
 
     var text = '<html>\n<head>\n'+$("head").html()+'<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/dropzone.css">\n</head>\n<body>\n';
     text += $("#block3").html();
+console.log(locsize);
+console.log(JSON.stringify(locsize));
     text += '<div id=locsize style="display:none;">' + JSON.stringify(locsize) + '</div>';
 
     Object.keys(locsize).forEach(function(myImg) {
