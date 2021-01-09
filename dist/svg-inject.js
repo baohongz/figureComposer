@@ -205,7 +205,6 @@
           // If element is a style element, replace IDs in all occurences of "url(#anyId)" in text content
           value = element.textContent;
           newValue = value && value.replace(funcIriRegex, function(match, id) {
-console.log(id);
             if (referencedIds) {
               referencedIds[id] = 1;
             }
