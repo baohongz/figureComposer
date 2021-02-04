@@ -212,29 +212,31 @@
     
     const plain = styleTag.innerHTML.replace(/\s/g,'').toLowerCase();
 
-    const regex = /([^\s{]+)[\s]*\{([\s\S]+?)\}/;
+    const regex = /([^\s{]+)[\s]*\{([\s\S]*?)\}/;
     const propertyRegex = /([\w\-]+)[\s]*:[\s]*([^;]+)/;
     const result = plain.match( new RegExp( regex, 'g' ) );
     if ( result ) {
       result.forEach( c => {
         const classResult = c.match( regex );
         const propertiesResult = classResult[ 2 ].match( new RegExp( propertyRegex, 'g' ) );
-        const properties = propertiesResult.reduce( ( collection, item ) => {
-          const p = item.match( propertyRegex );
-          collection[ p[ 1 ] ] = p[ 2 ];
-          return collection;
-        },{});
-        
-        subclass = classResult[ 1 ].split(','); // Baoohng: multiple classes share one style
-        subclass.forEach ( sc => {
-          sc = sc.replace(/^\./,'');
-          sc = sc.replace(/.*cls/,'cls');
-          if (!classCollection[ sc ]) {
-                classCollection[ sc ] = properties;
-          } else {
-            classCollection[ sc ] = Object.assign(classCollection[sc], properties);
-          }
-        });
+        if ( propertiesResult ) {
+          const properties = propertiesResult.reduce( ( collection, item ) => {
+            const p = item.match( propertyRegex );
+            collection[ p[ 1 ] ] = p[ 2 ];
+            return collection;
+          },{});
+          
+          subclass = classResult[ 1 ].split(','); // Baoohng: multiple classes share one style
+          subclass.forEach ( sc => {
+            sc = sc.replace(/^\./,'');
+            sc = sc.replace(/.*cls/,'cls');
+            if (!classCollection[ sc ]) {
+                  classCollection[ sc ] = properties;
+            } else {
+              classCollection[ sc ] = Object.assign(classCollection[sc], properties);
+            }
+          });
+        }
       });
       return classCollection;
     }
@@ -418,6 +420,7 @@
     imageId = "plot"+num; 
     var wm=20, hm=20;
 
+	svg = svg.replace(/\/\*[^*]*\*\//g, '');
     svg = svg.replace(/(\r\n|\n|\r)/gm,"").replace(/\s+/gm, " ");
 
     if (svg.match(/viewBox=["|'][0-9.]+\s+[0-9.]+\s+([0-9.]+)\s+([0-9.]+)/)) {
@@ -615,7 +618,6 @@ console.log(svgclass.length);
 
     var text = '<html>\n<head>\n'+$("head").html()+'<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/dropzone.css">\n</head>\n<body>\n';
     text += $("#block3").html();
-console.log(locsize);
 console.log(JSON.stringify(locsize));
     text += '<div id=locsize style="display:none;">' + JSON.stringify(locsize) + '</div>';
 
