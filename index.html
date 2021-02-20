@@ -728,7 +728,7 @@ console.log(JSON.stringify(locsize));
   });
 
   $(".plot-box").click (function (e) {
-  if (drag || e.originalEvent.target.className.baseVal.includes("svg-pan-zoom-control")) return;
+    if (drag || e.originalEvent.target.className.baseVal.includes("svg-pan-zoom-control")) return;
     var myImg = this.id.replace('_container','');
     $("#dialog-2").html(this.innerHTML.replace(myImg,myImg+'_popup'));
     $("#dialog-2 #svg-pan-zoom-controls").remove();
