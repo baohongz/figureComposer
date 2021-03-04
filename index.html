@@ -4,24 +4,24 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>bioInfograph</title>
-  <link rel="stylesheet" href="https://baohongz.github.io/bioInfograph/dist/bootstrap.min.css">
-  <link rel="stylesheet" href="https://baohongz.github.io/bioInfograph/dist/gridstack.css"/>
-  <link rel="stylesheet" href="https://baohongz.github.io/bioInfograph/dist/trash.css"/>
-  <link rel="stylesheet" href="https://baohongz.github.io/bioInfograph/dist/dropzone.css">
-  <link rel="stylesheet" href="https://baohongz.github.io/bioInfograph/dist/jquery-ui.css">
+  <title>figureComposer</title>
+  <link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/bootstrap.min.css">
+  <link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/gridstack.css"/>
+  <link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/trash.css"/>
+  <link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/dropzone.css">
+  <link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/jquery-ui.css">
 
-  <script src="https://baohongz.github.io/bioInfograph/dist/jquery.min.js"></script>
-  <script src="https://baohongz.github.io/bioInfograph/dist/jquery-ui.min.js"></script>
-  <script src="https://baohongz.github.io/bioInfograph/dist/bootstrap.min.js"></script>
-  <script src="https://baohongz.github.io/bioInfograph/dist/lodash.min.js"></script>
-  <script src="https://baohongz.github.io/bioInfograph/dist/gridstack.js"></script>
-  <script src="https://baohongz.github.io/bioInfograph/dist/gridstack.jQueryUI.js"></script>
-  <script src="https://baohongz.github.io/bioInfograph/dist/dropzone.js"></script>
-  <script src="https://baohongz.github.io/bioInfograph/dist/svg-pan-zoom.js"></script>
-  <script src="https://baohongz.github.io/bioInfograph/dist/svg-inject.js"></script>
-  <script src="https://baohongz.github.io/bioInfograph/dist/FileSaver.min.js"></script>
-  <script src="https://baohongz.github.io/bioInfograph/dist/tinymce/tinymce.min.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/jquery.min.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/jquery-ui.min.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/bootstrap.min.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/lodash.min.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/gridstack.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/gridstack.jQueryUI.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/dropzone.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/svg-pan-zoom.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/svg-inject.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/FileSaver.min.js"></script>
+  <script src="https://baohongz.github.io/figureComposer/dist/tinymce/tinymce.min.js"></script>
 
   <style type="text/css">
     .dropzone {
@@ -160,7 +160,7 @@
     <div align=center class="col-xs-4">
       <div class="trash"></div>
     </div>
-    <div align=center class="col-xs-3"><img width=240 height=200 src=bioInfograph_help.png></div>
+    <div align=center class="col-xs-3"><img width=240 height=200 src=figureComposer_help.png></div>
   </div> 
   <div class="row" id="plotcanvas">
     <div class="grid-stack"></div>
@@ -616,7 +616,7 @@ console.log(svgclass.length);
       };
     });
 
-    var text = '<html>\n<head>\n'+$("head").html()+'<link rel="stylesheet" href="https://baohongz.github.io/bioInfograph/dist/dropzone.css">\n</head>\n<body>\n';
+    var text = '<html>\n<head>\n'+$("head").html()+'<link rel="stylesheet" href="https://baohongz.github.io/figureComposer/dist/dropzone.css">\n</head>\n<body>\n';
     text += $("#block3").html();
 console.log(JSON.stringify(locsize));
     text += '<div id=locsize style="display:none;">' + JSON.stringify(locsize) + '</div>';
