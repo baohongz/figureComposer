@@ -1,6 +1,6 @@
-# figureComposer
-A web-based interactive multi-panel bio-infographic designing tool
+# bioInfograph
+bioInfograph: An online tool to design and display multi-panel scientific figure interactively
 ---
-![figureComposer](figure/Fig1.png?raw=true "figureComposer")
+![bioInfograph](figure/Fig1.png?raw=true "bioInfograph")
 ---
-[HD Video](https://baohongz.github.io/figureComposer/demo_video.html)
+[HD Video](https://baohongz.github.io/bioInfograph/demo_video.html)
