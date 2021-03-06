@@ -142,12 +142,11 @@
       <a class="btn btn-default" id="add-new-Text">Add Text Box</a>
       <a class="btn btn-default" id="add-new-Control">Add Control</a>
       <a class="btn btn-default" id="save-HTML">Save as HTML/session</a>
-      <a class="btn btn-default" href=figure/Fig1.html target=_blank>Demo1</a>
-      <a class="btn btn-default" href=figure/Fig.s5.html target=_blank>Demo2</a>
-      <a class="btn btn-default" href=violin.html target=_blank>Violin Plot</a>
       <a class="btn btn-default" href=demo_video.html target=_blank>Help</a>
       <input type="checkbox" class="custom-control-input" id="no-white-bg" checked>
-      <label class="custom-control-label" for="no-white-bg">No White Background</label>
+      <label class="custom-control-label" for="no-white-bg">No White Background</label> | 
+      <label>Opacity of</label> <input id="plot_sel" style="text-align:right;" size=5>:<input id="container_opacity_val" size=4 style="border:none;padding:0px;" onchange="setOpacity(this.value);">
+      <input style="display: inline-block; width: 50px;" type="range" min="0" max="1" value="1" step="0.05" id="container_opacity" oninput="setOpacity(this.value);">
     </div>
   </div>
   <div class="row no-print" style="padding-top:5px">
@@ -203,6 +202,18 @@
     return;
   });
 
+  function selectPlot (val) {
+    $('#plot_sel').val(val);
+    var opa = $('#'+val+'_container')[0].style.opacity;
+    var opanum = +opa;
+    document.getElementById('container_opacity_val').value = opanum;
+    document.getElementById('container_opacity').value = opanum;
+  }
+  function setOpacity (val) {
+    $('#'+$('#plot_sel').val()+'_container')[0].style.opacity=val;
+    document.getElementById('container_opacity_val').value = val;
+    document.getElementById('container_opacity').value = val;
+  }
   function parseStyles( styleTag ) {
     if ( !styleTag ) {
       return {};
@@ -293,7 +304,7 @@
               locsize = JSON.parse(RegExp.$1); 
             }
             Object.keys(locsize).forEach(function(myImg) {
-              addSVG (doc.querySelector('#'+myImg+'_saved').innerHTML, myImg, locsize[myImg]);
+              addSessionSVG (doc.querySelector('#'+myImg+'_saved').innerHTML, myImg, locsize[myImg]);
               if (locsize[myImg].type == "plot-box" && $('#'+myImg)[0].querySelector('.svg-pan-zoom_viewport') !== null) {
                 var matrix = $('#'+myImg)[0].querySelector('.svg-pan-zoom_viewport').transform.baseVal.consolidate().matrix;
                 var panZoom = svgPanZoom('#'+myImg, {
@@ -328,12 +339,13 @@
     }
   }
 
-  addSVG = function ( svg, imageId, node ) {
+  addSessionSVG = function ( svg, imageId, node ) {
     var figureTitle = imageId+"_title";
 
-    var el = this.grid.addWidget($('<div class=image_div id='+imageId+'z style="z-index:'+node.zindex+'; width:'+node.divwidth+'; height:'+node.divheight+'; left:'+node.left+'; top:'+node.top+';"><div class="grid-stack-item-content col-xs-4"><div class="tinymce-body" id='+figureTitle+' align="left"  onclick="initEditor\('+figureTitle+'\);this.focus\(\);">'+node.title+'</div><div id="'+imageId+'_container" class='+node.type+' style="width: 100%; height: 100%; ">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height);
+    var el = this.grid.addWidget($('<div class=image_div id='+imageId+'z style="z-index:'+node.zindex+'; width:'+node.divwidth+'; height:'+node.divheight+'; left:'+node.left+'; top:'+node.top+';"><div class="grid-stack-item-content col-xs-4"><div class="tinymce-body" id='+figureTitle+' align="left"  onclick="selectPlot(\''+imageId+'\');initEditor\('+figureTitle+'\);this.focus\(\);">'+node.title+'</div><div id="'+imageId+'_container" class='+node.type+' style="opacity:1; width:100%; height:100%;">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height);
 
-    $('#list-1').append('<div id='+imageId+'z_hdl class="dragzidx">'+imageId+'z</div>');
+    $('#list-1').append('<div id='+imageId+'z_hdl class="dragzidx" onclick="selectPlot(\''+imageId+'\');">'+imageId+'z</div>');
+    selectPlot(imageId);
 
     $('#'+imageId+'z_hdl').hover(
       function () {
@@ -457,8 +469,9 @@ console.log(svgclass.length);
 // Remove white background to make a plot transparent. It is based on how tools (R, Inkscape, cavasXpress, WikiPathways, Reactome or highcharts) handle background color.
     if ($('#no-white-bg').prop('checked')) {
       console.log('no-white-bg:'+$('#no-white-bg').prop('checked'));
-      svg = svg.replace(/<path *fill=\"#FFF\"[^>]+d=\"[^>]*M[^>]+h[^>]+v[^>]+H[^>]+z\"\/>/g,"");
-      svg = svg.replace(/<path *fill=\"rgb\(255,255,255\)\"[^>]+d=\"[^>]*M[^>]+L[^>]+L[^>]+L[^>]+Z\"\/>/,"");
+      svg = svg.replace(/<path *fill=\"#FFF\"[^>]+d=\"[^>]*M[^>]+h[^>]+v[^>]+H[^>]+z\"\/>/gi,"");
+      svg = svg.replace(/<path *fill=\"rgb\(255,255,255\)\"[^>]+d=\"[^>]*M[^>]+L[^>]+L[^>]+L[^>]+Z[^>]+\/>/gi,"");
+      svg = svg.replace(/<path *d=\"[^>]*M[^>]+L[^>]+L[^>]+L[^>]+Z[^>]+style=\"fill:#ffffff[^>]+\/>/gi,""); // scanpy
       svg = svg.replace(/<rect *fill=\"rgb\(255,255,255\)\"[^>]+x=[^>]+\"\/>/,"");
       svg = svg.replace(/<rect *x=\"0\" y=\"0\"[^>]+style=\"fill:rgb\(100\%,100\%,100\%\);fill-opacity:1;[^>]+\"\/>/g,"");
       svg = svg.replace(/fill:\s+rgb\(100\%,\s+100\%,\s+100\%\);\s+fill-opacity:\s+1;/gi,"fill:rgb\(100\%,100\%,100\%\);fill-opacity:0;");
@@ -468,6 +481,7 @@ console.log(svgclass.length);
       svg = svg.replace(/<rect fill=\"#ffffff\" class=\"highcharts-background\"/i,"<rect fill=\"none\" class=\"highcharts-background\""); // highcharts.js
       svg = svg.replace(/background:\s+white;/g,""); // WikiPathways
       svg = svg.replace(/<rect\s+id=\"BG[^>]+\/>/gi,""); // Reactome
+style="fill:#ffffff;"
     }
 
     var node = this.items.pop();
@@ -483,9 +497,10 @@ console.log(svgclass.length);
     }
 
     var initZindex = num+60; 
-    var el = this.grid.addWidget($('<div class=image_div id='+imageId+'z style="z-index:'+initZindex+';"><div class="grid-stack-item-content col-xs-4"><div class="tinymce-body" id='+figureTitle+' align="left"  onclick="initEditor\('+figureTitle+'\);this.focus\(\);">'+textHint+'</div><div id="'+imageId+'_container" class='+myType+' style="width: 100%; height: 100%; ">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height);
+    var el = this.grid.addWidget($('<div class=image_div id='+imageId+'z style="z-index:'+initZindex+';"><div class="grid-stack-item-content col-xs-4"><div class="tinymce-body" id='+figureTitle+' align="left"  onclick="selectPlot(\''+imageId+'\');initEditor\('+figureTitle+'\);this.focus\(\);">'+textHint+'</div><div id="'+imageId+'_container" class='+myType+' style="opacity:1; width:100%; height:100%;">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height);
 
-    $('#list-1').append('<div id='+imageId+'z_hdl class="dragzidx">'+imageId+'z</div>');
+    $('#list-1').append('<div id='+imageId+'z_hdl class="dragzidx" onclick="selectPlot(\''+imageId+'\');">'+imageId+'z</div>');
+    selectPlot(imageId);
 
     $('#'+imageId+'z_hdl').hover(
       function () {
@@ -594,14 +609,15 @@ console.log(svgclass.length);
         zm = matrix.a, panx = matrix.e, pany = matrix.f;
       }
     
-      locsize[el.attr('data-custom-id')] = {
+      locsize[myid] = {
         // save additional stuff here, but no pointers or circular stuff!
         // You need to save every data that is needed to recreate the node
         // If you get the data from the server, it might be only the id
         // Sidenode: you also should save the min and max height/widht
-        id    : el.attr('data-custom-id'),
-        title : $('#'+el.attr('data-custom-id')+'_title').html(),
-        type  : $('#'+el.attr('data-custom-id')+'_container')[0].className,
+        id    : myid,
+        title : $('#'+myid+'_title').html(),
+        type  : $('#'+myid+'_container')[0].className,
+        opacity: $('#'+myid+'_container').css('opacity'),
         zoom  : zm,
         pan   : {x: panx, y: pany},
         x     : node.x,
@@ -691,7 +707,7 @@ console.log(JSON.stringify(locsize));
     var node = locsize[imageId];
     var figureTitle = imageId+"_title";
 
-    var el = this.grid.addWidget($('<div style="z-index:'+node.zindex+'; width:'+node.divwidth+'; height:'+node.divheight+'; left:'+node.left+'; top:'+node.top+';"><div class="grid-stack-item-content col-xs-4"><div id='+figureTitle+' align="left" contenteditable="true"  onclick="this.focus\(\);">'+node.title+'</div><div id="'+imageId+'_container" class="'+node.type+'" style="width: 100%; height: 100%;">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height); 
+    var el = this.grid.addWidget($('<div style="z-index:'+node.zindex+'; width:'+node.divwidth+'; height:'+node.divheight+'; left:'+node.left+'; top:'+node.top+';"><div class="grid-stack-item-content col-xs-4"><div id='+figureTitle+' align="left" contenteditable="true"  onclick="this.focus\(\);">'+node.title+'</div><div id="'+imageId+'_container" class="'+node.type+'" style="opacity:'+node.opacity+'; width:100%; height:100%;">'+svg+'</div></div><div id="dragHandle"></div></div>'), node.x, node.y, node.width, node.height); 
 
     el.draggable({ handle: "#dragHandle" });
     return false;
